@@ -8,14 +8,14 @@
     "api"
   ],
   "license": "MIT",
-  "homepage": "https://github.com/your-username/n8n-nodes-infomaniak",
+  "homepage": "https://github.com/ascenziach/n8n-nodes-infomaniak",
   "author": {
-    "name": "Your Name",
-    "email": "your.email@example.com"
+    "name": "ascenziach",
+    "email": "ascenziach@users.noreply.github.com"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-username/n8n-nodes-infomaniak.git"
+    "url": "https://github.com/ascenziach/n8n-nodes-infomaniak.git"
   },
   "engines": {
     "node": ">=20.15"
