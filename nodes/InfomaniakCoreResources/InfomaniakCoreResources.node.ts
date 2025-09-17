@@ -3380,7 +3380,7 @@ export class InfomaniakCoreResources implements INodeType {
 								throw new NodeOperationError(this.getNode(), 'Failed to retrieve team', { itemIndex: i });
 							}
 						} else if (operation === 'updateTeam') {
-							// PUT /1/accounts/{account}/teams/{team}
+							// PATCH /1/accounts/{account}/teams/{team}
 							const accountId = this.getNodeParameter('accountId', i) as string;
 							const teamId = this.getNodeParameter('teamId', i) as string;
 							const teamData = this.getNodeParameter('teamData', i) as any;
@@ -3396,7 +3396,7 @@ export class InfomaniakCoreResources implements INodeType {
 							}
 
 							const options: IHttpRequestOptions = {
-								method: 'PUT' as IHttpRequestMethods,
+								method: 'PATCH' as IHttpRequestMethods,
 								headers: {
 									Authorization: `Bearer ${credentials.apiToken}`,
 									'Content-Type': 'application/json',
