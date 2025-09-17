@@ -1852,6 +1852,21 @@ export class InfomaniakCoreResources implements INodeType {
 				description: 'The user identifier',
 			},
 			{
+				displayName: 'Account ID',
+				name: 'accountId',
+				type: 'string',
+				required: true,
+				displayOptions: {
+					show: {
+						resource: ['userManagement'],
+						subResource: ['teams'],
+						operation: ['listTeams', 'createTeam', 'deleteTeam'],
+					},
+				},
+				default: '',
+				description: 'The account identifier',
+			},
+			{
 				displayName: 'Team ID',
 				name: 'teamId',
 				type: 'string',
@@ -3126,8 +3141,12 @@ export class InfomaniakCoreResources implements INodeType {
 							const accountId = this.getNodeParameter('accountId', i) as string;
 							const email = this.getNodeParameter('email', i) as string;
 
+							if (!email || email.trim() === '') {
+								throw new NodeOperationError(this.getNode(), 'Email parameter is required for inviting a user', { itemIndex: i });
+							}
+
 							const body = {
-								email: email,
+								email: email.trim(),
 							};
 
 							const options: IHttpRequestOptions = {
