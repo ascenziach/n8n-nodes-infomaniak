@@ -1946,6 +1946,58 @@ export class InfomaniakCoreResources implements INodeType {
 				description: 'Role type for the invited user',
 			},
 			{
+				displayName: 'Additional Options',
+				name: 'additionalOptions',
+				type: 'collection',
+				placeholder: 'Add Option',
+				default: {},
+				displayOptions: {
+					show: {
+						resource: ['userManagement'],
+						subResource: ['core'],
+						operation: ['inviteUser'],
+					},
+				},
+				options: [
+					{
+						displayName: 'Silent',
+						name: 'silent',
+						type: 'boolean',
+						default: false,
+						description: 'Whether or not the user will receive the invitation email',
+					},
+					{
+						displayName: 'Strict',
+						name: 'strict',
+						type: 'boolean',
+						default: true,
+						description: 'Whether or not the user should register with the same email address',
+					},
+					{
+						displayName: 'Teams',
+						name: 'teams',
+						type: 'string',
+						default: '',
+						placeholder: '1,2,3',
+						description: 'Comma-separated list of team IDs the user should be added to upon invitation',
+					},
+					{
+						displayName: 'Notifications',
+						name: 'notifications',
+						type: 'json',
+						default: '{}',
+						description: 'Notifications configuration for the user (JSON object)',
+					},
+					{
+						displayName: 'Permissions',
+						name: 'permissions',
+						type: 'json',
+						default: '{}',
+						description: 'Permissions configuration for the user (JSON object)',
+					},
+				],
+			},
+			{
 				displayName: 'Team Data',
 				name: 'teamData',
 				type: 'collection',
@@ -3155,6 +3207,7 @@ export class InfomaniakCoreResources implements INodeType {
 							const lastName = this.getNodeParameter('lastName', i) as string;
 							const locale = this.getNodeParameter('locale', i) as string;
 							const roleType = this.getNodeParameter('roleType', i) as string;
+							const additionalOptions = this.getNodeParameter('additionalOptions', i, {}) as any;
 
 							// Validate required parameters
 							if (!accountId || accountId.trim() === '') {
@@ -3177,13 +3230,55 @@ export class InfomaniakCoreResources implements INodeType {
 							}
 
 							// Body with all required fields as per API documentation
-							const body = {
+							const body: any = {
 								email: email.trim(),
 								first_name: firstName.trim(),
 								last_name: lastName.trim(),
 								locale: locale,
 								role_type: roleType
 							};
+
+							// Add optional parameters if provided
+							if (additionalOptions.silent !== undefined) {
+								body.silent = additionalOptions.silent;
+							}
+							if (additionalOptions.strict !== undefined) {
+								body.strict = additionalOptions.strict;
+							}
+							if (additionalOptions.teams && additionalOptions.teams.trim() !== '') {
+								// Convert comma-separated string to array of integers
+								const teamsArray = additionalOptions.teams
+									.split(',')
+									.map((id: string) => parseInt(id.trim()))
+									.filter((id: number) => !isNaN(id));
+								if (teamsArray.length > 0) {
+									body.teams = teamsArray;
+								}
+							}
+							if (additionalOptions.notifications) {
+								try {
+									const notificationsObj = typeof additionalOptions.notifications === 'string'
+										? JSON.parse(additionalOptions.notifications)
+										: additionalOptions.notifications;
+									if (Object.keys(notificationsObj).length > 0) {
+										body.notifications = notificationsObj;
+									}
+								} catch (error) {
+									throw new NodeOperationError(this.getNode(), 'Invalid JSON format for notifications parameter', { itemIndex: i });
+								}
+							}
+							if (additionalOptions.permissions) {
+								try {
+									const permissionsObj = typeof additionalOptions.permissions === 'string'
+										? JSON.parse(additionalOptions.permissions)
+										: additionalOptions.permissions;
+									if (Object.keys(permissionsObj).length > 0) {
+										body.permissions = permissionsObj;
+									}
+								} catch (error) {
+									throw new NodeOperationError(this.getNode(), 'Invalid JSON format for permissions parameter', { itemIndex: i });
+								}
+							}
 
 							const options: IHttpRequestOptions = {
 								method: 'POST' as IHttpRequestMethods,
