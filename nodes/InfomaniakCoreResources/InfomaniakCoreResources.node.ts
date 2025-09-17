@@ -2000,11 +2000,18 @@ export class InfomaniakCoreResources implements INodeType {
 						description: 'Team name',
 					},
 					{
-						displayName: 'Description',
-						name: 'description',
+						displayName: 'Owned By ID',
+						name: 'ownedById',
 						type: 'string',
 						default: '',
-						description: 'Team description',
+						description: 'User ID of the team owner',
+					},
+					{
+						displayName: 'Permissions',
+						name: 'permissions',
+						type: 'json',
+						default: '{}',
+						description: 'Team permissions as JSON object',
 					},
 				],
 			},
@@ -3334,10 +3341,31 @@ export class InfomaniakCoreResources implements INodeType {
 							const accountId = this.getNodeParameter('accountId', i) as string;
 							const teamData = this.getNodeParameter('teamData', i) as any;
 
-							const body = {
-								name: teamData.name,
-								description: teamData.description,
-							};
+							const body: any = {};
+
+							// Required parameter
+							if (!teamData.name || teamData.name.trim() === '') {
+								throw new NodeOperationError(this.getNode(), 'Team name is required', { itemIndex: i });
+							}
+							body.name = teamData.name.trim();
+
+							// Optional parameters
+							if (teamData.ownedById && teamData.ownedById.trim() !== '') {
+								body.owned_by_id = teamData.ownedById.trim();
+							}
+
+							if (teamData.permissions) {
+								try {
+									const permissionsObj = typeof teamData.permissions === 'string'
+										? JSON.parse(teamData.permissions)
+										: teamData.permissions;
+									if (Object.keys(permissionsObj).length > 0) {
+										body.permissions = permissionsObj;
+									}
+								} catch (error) {
+									throw new NodeOperationError(this.getNode(), 'Invalid JSON format for permissions parameter', { itemIndex: i });
+								}
+							}
 
 							const options: IHttpRequestOptions = {
 								method: 'POST' as IHttpRequestMethods,
@@ -3391,8 +3419,22 @@ export class InfomaniakCoreResources implements INodeType {
 							if (teamData.name && teamData.name.trim() !== '') {
 								body.name = teamData.name.trim();
 							}
-							if (teamData.description !== undefined) {
-								body.description = teamData.description;
+
+							if (teamData.ownedById && teamData.ownedById.trim() !== '') {
+								body.owned_by_id = teamData.ownedById.trim();
+							}
+
+							if (teamData.permissions) {
+								try {
+									const permissionsObj = typeof teamData.permissions === 'string'
+										? JSON.parse(teamData.permissions)
+										: teamData.permissions;
+									if (Object.keys(permissionsObj).length > 0) {
+										body.permissions = permissionsObj;
+									}
+								} catch (error) {
+									throw new NodeOperationError(this.getNode(), 'Invalid JSON format for permissions parameter', { itemIndex: i });
+								}
 							}
 
 							const options: IHttpRequestOptions = {
