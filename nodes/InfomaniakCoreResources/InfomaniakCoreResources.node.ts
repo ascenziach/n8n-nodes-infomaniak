@@ -1174,7 +1174,6 @@ export class InfomaniakCoreResources implements INodeType {
 						type: 'string',
 						default: 'base64',
 						description: 'Encoding type for the avatar',
-						required: true,
 					},
 				],
 			},

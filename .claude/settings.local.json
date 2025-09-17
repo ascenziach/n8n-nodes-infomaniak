@@ -19,7 +19,9 @@
       "Bash(git config:*)",
       "Bash(npm login)",
       "Bash(npm:*)",
-      "Bash(rg:*)"
+      "Bash(rg:*)",
+      "Bash(awk:*)",
+      "Bash(npx tsc:*)"
     ],
     "deny": [],
     "ask": []
