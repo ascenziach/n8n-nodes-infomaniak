@@ -2569,53 +2569,52 @@ export class InfomaniakCoreResources implements INodeType {
 
 						const qs: any = {};
 
-						// Add filters
-						if (productFilters.accountId) {
+						// Add filters - only meaningful values
+						if (productFilters.accountId && productFilters.accountId > 0) {
 							qs.account_id = productFilters.accountId;
 						}
-						if (productFilters.customerName) {
+						if (productFilters.customerName && productFilters.customerName.trim()) {
 							qs.customer_name = productFilters.customerName;
 						}
-						if (productFilters.fqdn) {
+						if (productFilters.fqdn && productFilters.fqdn.trim()) {
 							qs.fqdn = productFilters.fqdn;
 						}
-						if (productFilters.internalName) {
+						if (productFilters.internalName && productFilters.internalName.trim()) {
 							qs.internal_name = productFilters.internalName;
 						}
-						if (productFilters.productId) {
+						if (productFilters.productId && productFilters.productId > 0) {
 							qs.product_id = productFilters.productId;
 						}
-						if (productFilters.serviceId) {
+						if (productFilters.serviceId && productFilters.serviceId > 0 && productFilters.serviceId !== 1) {
 							qs.service_id = productFilters.serviceId;
 						}
-						if (productFilters.serviceName) {
+						if (productFilters.serviceName && productFilters.serviceName !== 'ai_tools') {
 							qs.service_name = productFilters.serviceName;
 						}
 
-						// Add additional options
-						if (additionalOptions.with) {
+						// Add additional options - only meaningful values
+						if (additionalOptions.with && additionalOptions.with.length > 0) {
 							qs.with = additionalOptions.with;
 						}
 						if (additionalOptions.returnTotal) {
 							qs.return = 'total';
 						}
-						if (additionalOptions.orderBy) {
+						if (additionalOptions.orderBy && additionalOptions.orderBy !== 'id') {
 							qs.order_by = additionalOptions.orderBy;
 						}
-						if (additionalOptions.order) {
+						if (additionalOptions.order && additionalOptions.order !== 'asc') {
 							qs.order = additionalOptions.order;
 						}
-						if (additionalOptions.page) {
+						if (additionalOptions.page && additionalOptions.page > 1) {
 							qs.page = additionalOptions.page;
 						}
-						if (additionalOptions.perPage) {
+						if (additionalOptions.perPage && additionalOptions.perPage > 0) {
 							qs.per_page = additionalOptions.perPage;
+						} else if (!additionalOptions.returnTotal && !returnAll && limit > 0) {
+							qs.per_page = limit;
 						}
-						if (additionalOptions.skip !== undefined) {
+						if (additionalOptions.skip && additionalOptions.skip > 0) {
 							qs.skip = additionalOptions.skip;
-						}
-						if (!additionalOptions.returnTotal && !returnAll) {
-							qs.limit = limit;
 						}
 
 						const options: IHttpRequestOptions = {
