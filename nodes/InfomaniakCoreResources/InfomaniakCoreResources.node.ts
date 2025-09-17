@@ -2942,29 +2942,29 @@ export class InfomaniakCoreResources implements INodeType {
 
 						const qs: any = {};
 
-						if (additionalOptions.return) {
+						// Only add meaningful parameters
+						if (additionalOptions.return && additionalOptions.return !== 'total') {
 							qs.return = additionalOptions.return;
 						}
-						if (additionalOptions.skip !== undefined) {
+						if (additionalOptions.skip && additionalOptions.skip > 0) {
 							qs.skip = additionalOptions.skip;
 						}
-						if (additionalOptions.page) {
+						if (additionalOptions.page && additionalOptions.page > 1) {
 							qs.page = additionalOptions.page;
 						}
-						if (additionalOptions.perPage) {
+						if (additionalOptions.perPage && additionalOptions.perPage > 0) {
 							qs.per_page = additionalOptions.perPage;
+						} else if (!additionalOptions.return && !returnAll && limit > 0) {
+							qs.per_page = limit;
 						}
-						if (additionalOptions.orderBy) {
+						if (additionalOptions.orderBy && additionalOptions.orderBy !== 'id') {
 							qs.order_by = additionalOptions.orderBy;
 						}
-						if (additionalOptions.order) {
+						if (additionalOptions.order && additionalOptions.order !== 'asc') {
 							qs.order = additionalOptions.order;
 						}
-						if (additionalOptions.orderFor) {
+						if (additionalOptions.orderFor && Object.keys(additionalOptions.orderFor).length > 0) {
 							qs.order_for = additionalOptions.orderFor;
-						}
-						if (!additionalOptions.return && !returnAll) {
-							qs.limit = limit;
 						}
 
 						const options: IHttpRequestOptions = {
@@ -3028,25 +3028,28 @@ export class InfomaniakCoreResources implements INodeType {
 
 						const qs: any = {};
 
-						if (additionalOptions.search) {
+						// Only add meaningful parameters
+						if (additionalOptions.search && additionalOptions.search.trim()) {
 							qs.search = additionalOptions.search;
 						}
-						if (additionalOptions.return) {
+						if (additionalOptions.return && additionalOptions.return !== 'total') {
 							qs.return = additionalOptions.return;
 						}
-						if (additionalOptions.skip !== undefined) {
+						if (additionalOptions.skip && additionalOptions.skip > 0) {
 							qs.skip = additionalOptions.skip;
 						}
-						if (additionalOptions.page) {
+						if (additionalOptions.page && additionalOptions.page > 1) {
 							qs.page = additionalOptions.page;
 						}
-						if (additionalOptions.perPage) {
+						if (additionalOptions.perPage && additionalOptions.perPage > 0) {
 							qs.per_page = additionalOptions.perPage;
+						} else if (!additionalOptions.return && !returnAll && limit > 0) {
+							qs.per_page = limit;
 						}
-						if (additionalOptions.orderBy) {
+						if (additionalOptions.orderBy && additionalOptions.orderBy !== 'id') {
 							qs.order_by = additionalOptions.orderBy;
 						}
-						if (additionalOptions.order) {
+						if (additionalOptions.order && additionalOptions.order !== 'asc') {
 							qs.order = additionalOptions.order;
 						}
 						if (additionalOptions.orderFor) {
@@ -3054,18 +3057,18 @@ export class InfomaniakCoreResources implements INodeType {
 								const orderForObj = typeof additionalOptions.orderFor === 'string'
 									? JSON.parse(additionalOptions.orderFor)
 									: additionalOptions.orderFor;
-								qs.order_for = orderForObj;
+								if (Object.keys(orderForObj).length > 0) {
+									qs.order_for = orderForObj;
+								}
 							} catch (error) {
 								throw new NodeOperationError(this.getNode(), 'Invalid JSON format for Order For parameter', { itemIndex: i });
 							}
-						}
-						if (!additionalOptions.return && !returnAll) {
-							qs.limit = limit;
 						}
 
 						const options: IHttpRequestOptions = {
 							method: 'GET' as IHttpRequestMethods,
 							headers: {
+								Authorization: `Bearer ${credentials.apiToken}`,
 								'Content-Type': 'application/json',
 							},
 							url: 'https://api.infomaniak.com/1/timezones',
