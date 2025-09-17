@@ -1860,7 +1860,7 @@ export class InfomaniakCoreResources implements INodeType {
 					show: {
 						resource: ['userManagement'],
 						subResource: ['teams'],
-						operation: ['listTeams', 'createTeam', 'deleteTeam'],
+						operation: ['listTeams', 'createTeam', 'getTeam', 'deleteTeam'],
 					},
 				},
 				default: '',
@@ -3356,6 +3356,28 @@ export class InfomaniakCoreResources implements INodeType {
 								returnData.push(...this.helpers.returnJsonArray(response.data));
 							} else {
 								throw new NodeOperationError(this.getNode(), 'Failed to create team', { itemIndex: i });
+							}
+						} else if (operation === 'getTeam') {
+							// GET /1/accounts/{account}/teams/{team}
+							const accountId = this.getNodeParameter('accountId', i) as string;
+							const teamId = this.getNodeParameter('teamId', i) as string;
+
+							const options: IHttpRequestOptions = {
+								method: 'GET' as IHttpRequestMethods,
+								headers: {
+									Authorization: `Bearer ${credentials.apiToken}`,
+									'Content-Type': 'application/json',
+								},
+								url: `https://api.infomaniak.com/1/accounts/${accountId}/teams/${teamId}`,
+								json: true,
+							};
+
+							const response = await this.helpers.httpRequest(options);
+
+							if (response.result === 'success' && response.data) {
+								returnData.push(...this.helpers.returnJsonArray(response.data));
+							} else {
+								throw new NodeOperationError(this.getNode(), 'Failed to retrieve team', { itemIndex: i });
 							}
 						} else if (operation === 'deleteTeam') {
 							// DELETE /1/accounts/{account}/teams/{team}
