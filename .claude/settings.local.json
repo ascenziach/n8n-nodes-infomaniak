@@ -21,7 +21,8 @@
       "Bash(npm:*)",
       "Bash(rg:*)",
       "Bash(awk:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "WebFetch(domain:developer.infomaniak.com)"
     ],
     "deny": [],
     "ask": []

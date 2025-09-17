@@ -2485,26 +2485,26 @@ export class InfomaniakCoreResources implements INodeType {
 
 						const qs: any = {};
 
+						// Only add parameters if they have meaningful values
 						if (additionalOptions.returnTotal) {
 							qs.return = 'total';
 						}
-						if (additionalOptions.orderBy) {
+						if (additionalOptions.orderBy && additionalOptions.orderBy !== 'name') {
 							qs.order_by = additionalOptions.orderBy;
 						}
-						if (additionalOptions.order) {
+						if (additionalOptions.order && additionalOptions.order !== 'asc') {
 							qs.order = additionalOptions.order;
 						}
-						if (additionalOptions.page) {
+						if (additionalOptions.page && additionalOptions.page > 1) {
 							qs.page = additionalOptions.page;
 						}
-						if (additionalOptions.perPage) {
+						if (additionalOptions.perPage && additionalOptions.perPage > 0) {
 							qs.per_page = additionalOptions.perPage;
+						} else if (!additionalOptions.returnTotal && !returnAll && limit > 0) {
+							qs.per_page = limit;
 						}
-						if (additionalOptions.skip !== undefined) {
+						if (additionalOptions.skip && additionalOptions.skip > 0) {
 							qs.skip = additionalOptions.skip;
-						}
-						if (!additionalOptions.returnTotal && !returnAll) {
-							qs.limit = limit;
 						}
 
 						const options: IHttpRequestOptions = {
