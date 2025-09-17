@@ -1942,6 +1942,43 @@ export class InfomaniakCoreResources implements INodeType {
 				description: 'Email address of the user to invite',
 			},
 			{
+				displayName: 'Invitation Data',
+				name: 'invitationData',
+				type: 'collection',
+				placeholder: 'Add Field',
+				default: {},
+				displayOptions: {
+					show: {
+						resource: ['userManagement'],
+						subResource: ['core'],
+						operation: ['inviteUser'],
+					},
+				},
+				options: [
+					{
+						displayName: 'Admin',
+						name: 'admin',
+						type: 'boolean',
+						default: false,
+						description: 'Whether to invite as admin',
+					},
+					{
+						displayName: 'Language',
+						name: 'language',
+						type: 'options',
+						options: [
+							{ name: 'French', value: 'fr' },
+							{ name: 'English', value: 'en' },
+							{ name: 'German', value: 'de' },
+							{ name: 'Italian', value: 'it' },
+							{ name: 'Spanish', value: 'es' },
+						],
+						default: 'fr',
+						description: 'Language for the invitation',
+					},
+				],
+			},
+			{
 				displayName: 'Team Data',
 				name: 'teamData',
 				type: 'collection',
@@ -3140,14 +3177,31 @@ export class InfomaniakCoreResources implements INodeType {
 							// POST /1/accounts/{account}/invitations
 							const accountId = this.getNodeParameter('accountId', i) as string;
 							const email = this.getNodeParameter('email', i) as string;
+							const invitationData = this.getNodeParameter('invitationData', i, {}) as any;
 
 							if (!email || email.trim() === '') {
 								throw new NodeOperationError(this.getNode(), 'Email parameter is required for inviting a user', { itemIndex: i });
 							}
 
-							const body = {
+							const body: any = {
 								email: email.trim(),
 							};
+
+							// Add optional parameters if provided
+							if (invitationData.admin !== undefined) {
+								body.admin = invitationData.admin;
+							}
+							if (invitationData.language && invitationData.language !== 'fr') {
+								body.language = invitationData.language;
+							}
+
+							// Only send non-empty, non-default values to prevent 422 errors
+							const filteredBody: any = {};
+							Object.keys(body).forEach(key => {
+								if (body[key] !== undefined && body[key] !== null && body[key] !== '') {
+									filteredBody[key] = body[key];
+								}
+							});
 
 							const options: IHttpRequestOptions = {
 								method: 'POST' as IHttpRequestMethods,
@@ -3156,7 +3210,7 @@ export class InfomaniakCoreResources implements INodeType {
 									'Content-Type': 'application/json',
 								},
 								url: `https://api.infomaniak.com/1/accounts/${accountId}/invitations`,
-								body,
+								body: filteredBody,
 								json: true,
 							};
 
