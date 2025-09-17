@@ -1816,10 +1816,7 @@ export class InfomaniakCoreResources implements INodeType {
 				displayOptions: {
 					show: {
 						resource: ['userManagement'],
-					},
-					hide: {
-						subResource: ['accounts'],
-						operation: ['listCurrentAccountProducts'],
+						operation: ['inviteUser', 'cancelInvitation'],
 					},
 				},
 				default: '',
