@@ -1874,6 +1874,78 @@ export class InfomaniakCoreResources implements INodeType {
 				description: 'Email address of the user to invite',
 			},
 			{
+				displayName: 'First Name',
+				name: 'firstName',
+				type: 'string',
+				required: true,
+				displayOptions: {
+					show: {
+						resource: ['userManagement'],
+						subResource: ['core'],
+						operation: ['inviteUser'],
+					},
+				},
+				default: '',
+				description: 'First name of the user to invite',
+			},
+			{
+				displayName: 'Last Name',
+				name: 'lastName',
+				type: 'string',
+				required: true,
+				displayOptions: {
+					show: {
+						resource: ['userManagement'],
+						subResource: ['core'],
+						operation: ['inviteUser'],
+					},
+				},
+				default: '',
+				description: 'Last name of the user to invite',
+			},
+			{
+				displayName: 'Locale',
+				name: 'locale',
+				type: 'options',
+				required: true,
+				displayOptions: {
+					show: {
+						resource: ['userManagement'],
+						subResource: ['core'],
+						operation: ['inviteUser'],
+					},
+				},
+				options: [
+					{ name: 'French', value: 'fr' },
+					{ name: 'English', value: 'en' },
+					{ name: 'German', value: 'de' },
+					{ name: 'Italian', value: 'it' },
+					{ name: 'Spanish', value: 'es' },
+				],
+				default: 'fr',
+				description: 'Language/locale for the invitation',
+			},
+			{
+				displayName: 'Role Type',
+				name: 'roleType',
+				type: 'options',
+				required: true,
+				displayOptions: {
+					show: {
+						resource: ['userManagement'],
+						subResource: ['core'],
+						operation: ['inviteUser'],
+					},
+				},
+				options: [
+					{ name: 'Admin', value: 'admin' },
+					{ name: 'User', value: 'user' },
+					{ name: 'Read Only', value: 'readonly' },
+				],
+				default: 'user',
+				description: 'Role type for the invited user',
+			},
+			{
 				displayName: 'Team Data',
 				name: 'teamData',
 				type: 'collection',
@@ -3079,6 +3151,10 @@ export class InfomaniakCoreResources implements INodeType {
 							// POST /1/accounts/{account}/invitations
 							const accountId = this.getNodeParameter('accountId', i) as string;
 							const email = this.getNodeParameter('email', i) as string;
+							const firstName = this.getNodeParameter('firstName', i) as string;
+							const lastName = this.getNodeParameter('lastName', i) as string;
+							const locale = this.getNodeParameter('locale', i) as string;
+							const roleType = this.getNodeParameter('roleType', i) as string;
 
 							// Validate required parameters
 							if (!accountId || accountId.trim() === '') {
@@ -3087,6 +3163,12 @@ export class InfomaniakCoreResources implements INodeType {
 							if (!email || email.trim() === '') {
 								throw new NodeOperationError(this.getNode(), 'Email parameter is required for inviting a user', { itemIndex: i });
 							}
+							if (!firstName || firstName.trim() === '') {
+								throw new NodeOperationError(this.getNode(), 'First name is required for inviting a user', { itemIndex: i });
+							}
+							if (!lastName || lastName.trim() === '') {
+								throw new NodeOperationError(this.getNode(), 'Last name is required for inviting a user', { itemIndex: i });
+							}
 
 							// Validate email format
 							const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -3094,9 +3176,13 @@ export class InfomaniakCoreResources implements INodeType {
 								throw new NodeOperationError(this.getNode(), 'Invalid email format', { itemIndex: i });
 							}
 
-							// Try different body formats that might be expected by the API
+							// Body with all required fields as per API documentation
 							const body = {
-								email: email.trim()
+								email: email.trim(),
+								first_name: firstName.trim(),
+								last_name: lastName.trim(),
+								locale: locale,
+								role_type: roleType
 							};
 
 							const options: IHttpRequestOptions = {
