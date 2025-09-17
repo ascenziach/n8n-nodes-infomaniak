@@ -18,7 +18,8 @@
       "Bash(git push:*)",
       "Bash(git config:*)",
       "Bash(npm login)",
-      "Bash(npm:*)"
+      "Bash(npm:*)",
+      "Bash(rg:*)"
     ],
     "deny": [],
     "ask": []
