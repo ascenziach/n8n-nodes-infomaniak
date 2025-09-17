@@ -1404,13 +1404,13 @@ export class InfomaniakCoreResources implements INodeType {
 				name: 'taskUuid',
 				type: 'string',
 				required: true,
+				default: '',
 				displayOptions: {
 					show: {
 						resource: ['task'],
 						operation: ['get'],
 					},
 				},
-				default: '',
 				description: 'The unique identifier (UUID) of the task to request',
 			},
 			// Timezone Operations
@@ -1567,13 +1567,13 @@ export class InfomaniakCoreResources implements INodeType {
 				name: 'timezoneId',
 				type: 'number',
 				required: true,
+				default: 0,
 				displayOptions: {
 					show: {
 						resource: ['timezone'],
 						operation: ['get'],
 					},
 				},
-				default: 0,
 				description: 'The unique identifier of the timezone to request',
 			},
 			// User Management Operations
