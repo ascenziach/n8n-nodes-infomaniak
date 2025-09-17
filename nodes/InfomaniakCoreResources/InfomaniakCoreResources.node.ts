@@ -1786,6 +1786,18 @@ export class InfomaniakCoreResources implements INodeType {
 				},
 				options: [
 					{
+						name: 'Invite User',
+						value: 'inviteUser',
+						description: 'Invite a user to an account',
+						action: 'Invite a user',
+					},
+					{
+						name: 'Cancel Invitation',
+						value: 'cancelInvitation',
+						description: 'Cancel an invitation',
+						action: 'Cancel an invitation',
+					},
+					{
 						name: 'Get Invitation',
 						value: 'getInvitation',
 						description: 'Get invitation details',
@@ -1794,17 +1806,17 @@ export class InfomaniakCoreResources implements INodeType {
 					{
 						name: 'Update Invitation',
 						value: 'updateInvitation',
-
+						description: 'Update an invitation',
 						action: 'Update invitation',
 					},
 					{
 						name: 'Get User Invitations',
 						value: 'getUserInvitations',
-
+						description: 'Get invitations for a user',
 						action: 'Get user invitations',
 					},
 				],
-				default: 'getInvitation',
+				default: 'inviteUser',
 			},
 			// User Management Parameters
 			{
@@ -1816,6 +1828,9 @@ export class InfomaniakCoreResources implements INodeType {
 					show: {
 						resource: ['userManagement'],
 						operation: ['inviteUser', 'cancelInvitation'],
+					},
+					hide: {
+						subResource: ['invitations'],
 					},
 				},
 				default: '',
@@ -1882,6 +1897,21 @@ export class InfomaniakCoreResources implements INodeType {
 				description: 'The team identifier',
 			},
 			{
+				displayName: 'Account ID',
+				name: 'accountId',
+				type: 'string',
+				required: true,
+				displayOptions: {
+					show: {
+						resource: ['userManagement'],
+						subResource: ['invitations'],
+						operation: ['inviteUser', 'cancelInvitation'],
+					},
+				},
+				default: '',
+				description: 'The account identifier',
+			},
+			{
 				displayName: 'Invitation ID',
 				name: 'invitationId',
 				type: 'string',
@@ -1934,8 +1964,10 @@ export class InfomaniakCoreResources implements INodeType {
 				displayOptions: {
 					show: {
 						resource: ['userManagement'],
-						subResource: ['core'],
 						operation: ['inviteUser'],
+					},
+					hide: {
+						subResource: ['accounts', 'teams'],
 					},
 				},
 				default: '',
@@ -1950,8 +1982,10 @@ export class InfomaniakCoreResources implements INodeType {
 				displayOptions: {
 					show: {
 						resource: ['userManagement'],
-						subResource: ['core'],
 						operation: ['inviteUser'],
+					},
+					hide: {
+						subResource: ['accounts', 'teams'],
 					},
 				},
 				options: [
@@ -3479,7 +3513,77 @@ export class InfomaniakCoreResources implements INodeType {
 							}
 						}
 					} else if (subResource === 'invitations') {
-						if (operation === 'getInvitation') {
+						if (operation === 'inviteUser') {
+							// POST /1/accounts/{account}/invitations
+							const accountId = this.getNodeParameter('accountId', i) as string;
+							const email = this.getNodeParameter('email', i) as string;
+							const invitationData = this.getNodeParameter('invitationData', i, {}) as any;
+
+							if (!email || email.trim() === '') {
+								throw new NodeOperationError(this.getNode(), 'Email parameter is required for inviting a user', { itemIndex: i });
+							}
+
+							const body: any = {
+								email: email.trim(),
+							};
+
+							// Add optional parameters if provided
+							if (invitationData.admin !== undefined) {
+								body.admin = invitationData.admin;
+							}
+							if (invitationData.language && invitationData.language !== 'fr') {
+								body.language = invitationData.language;
+							}
+
+							// Only send non-empty, non-default values to prevent 422 errors
+							const filteredBody: any = {};
+							Object.keys(body).forEach(key => {
+								if (body[key] !== undefined && body[key] !== null && body[key] !== '') {
+									filteredBody[key] = body[key];
+								}
+							});
+
+							const options: IHttpRequestOptions = {
+								method: 'POST' as IHttpRequestMethods,
+								headers: {
+									Authorization: `Bearer ${credentials.apiToken}`,
+									'Content-Type': 'application/json',
+								},
+								url: `https://api.infomaniak.com/1/accounts/${accountId}/invitations`,
+								body: filteredBody,
+								json: true,
+							};
+
+							const response = await this.helpers.httpRequest(options);
+
+							if (response.result === 'success' && response.data) {
+								returnData.push(...this.helpers.returnJsonArray(response.data));
+							} else {
+								throw new NodeOperationError(this.getNode(), 'Failed to invite user', { itemIndex: i });
+							}
+						} else if (operation === 'cancelInvitation') {
+							// DELETE /1/accounts/{account}/invitations/{invitation}
+							const accountId = this.getNodeParameter('accountId', i) as string;
+							const invitationId = this.getNodeParameter('invitationId', i) as string;
+
+							const options: IHttpRequestOptions = {
+								method: 'DELETE' as IHttpRequestMethods,
+								headers: {
+									Authorization: `Bearer ${credentials.apiToken}`,
+									'Content-Type': 'application/json',
+								},
+								url: `https://api.infomaniak.com/1/accounts/${accountId}/invitations/${invitationId}`,
+								json: true,
+							};
+
+							const response = await this.helpers.httpRequest(options);
+
+							if (response.result === 'success') {
+								returnData.push({ json: { success: true, message: `Invitation ${invitationId} cancelled successfully` } });
+							} else {
+								throw new NodeOperationError(this.getNode(), 'Failed to cancel invitation', { itemIndex: i });
+							}
+						} else if (operation === 'getInvitation') {
 							// GET /1/accounts/{account}/invitations/{invitation}
 							const accountId = this.getNodeParameter('accountId', i) as string;
 							const invitationId = this.getNodeParameter('invitationId', i) as string;
