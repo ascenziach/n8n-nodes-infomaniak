@@ -3080,11 +3080,21 @@ export class InfomaniakCoreResources implements INodeType {
 							const accountId = this.getNodeParameter('accountId', i) as string;
 							const email = this.getNodeParameter('email', i) as string;
 
+							// Validate required parameters
+							if (!accountId || accountId.trim() === '') {
+								throw new NodeOperationError(this.getNode(), 'Account ID is required for inviting a user', { itemIndex: i });
+							}
 							if (!email || email.trim() === '') {
 								throw new NodeOperationError(this.getNode(), 'Email parameter is required for inviting a user', { itemIndex: i });
 							}
 
-							// Simple body with just the email - API documentation may require specific format
+							// Validate email format
+							const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+							if (!emailRegex.test(email.trim())) {
+								throw new NodeOperationError(this.getNode(), 'Invalid email format', { itemIndex: i });
+							}
+
+							// Try different body formats that might be expected by the API
 							const body = {
 								email: email.trim()
 							};
@@ -3095,17 +3105,25 @@ export class InfomaniakCoreResources implements INodeType {
 									Authorization: `Bearer ${credentials.apiToken}`,
 									'Content-Type': 'application/json',
 								},
-								url: `https://api.infomaniak.com/1/accounts/${accountId}/invitations`,
+								url: `https://api.infomaniak.com/1/accounts/${accountId.trim()}/invitations`,
 								body,
 								json: true,
 							};
 
-							const response = await this.helpers.httpRequest(options);
-
-							if (response.result === 'success' && response.data) {
-								returnData.push(...this.helpers.returnJsonArray(response.data));
-							} else {
-								throw new NodeOperationError(this.getNode(), 'Failed to invite user', { itemIndex: i });
+							try {
+								const response = await this.helpers.httpRequest(options);
+								if (response.result === 'success' && response.data) {
+									returnData.push(...this.helpers.returnJsonArray(response.data));
+								} else {
+									throw new NodeOperationError(this.getNode(), 'Failed to invite user', { itemIndex: i });
+								}
+							} catch (error: any) {
+								// Enhanced error reporting for 422 errors
+								if (error.response && error.response.status === 422) {
+									const errorMessage = error.response.data ? JSON.stringify(error.response.data) : 'Unknown 422 error';
+									throw new NodeOperationError(this.getNode(), `Invitation failed (422): ${errorMessage}. Account ID: ${accountId}, Email: ${email}`, { itemIndex: i });
+								}
+								throw error;
 							}
 						} else if (operation === 'cancelInvitation') {
 							// DELETE /1/accounts/{account}/invitations/{invitation}
