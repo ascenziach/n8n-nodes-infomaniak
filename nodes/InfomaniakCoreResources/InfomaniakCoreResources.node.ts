@@ -3096,6 +3096,7 @@ export class InfomaniakCoreResources implements INodeType {
 						const options: IHttpRequestOptions = {
 							method: 'GET' as IHttpRequestMethods,
 							headers: {
+								Authorization: `Bearer ${credentials.apiToken}`,
 								'Content-Type': 'application/json',
 							},
 							url: `https://api.infomaniak.com/1/timezones/${timezoneId}`,
@@ -3468,6 +3469,7 @@ export class InfomaniakCoreResources implements INodeType {
 							const options: IHttpRequestOptions = {
 								method: 'GET' as IHttpRequestMethods,
 								headers: {
+									Authorization: `Bearer ${credentials.apiToken}`,
 									'Content-Type': 'application/json',
 								},
 								url: `https://api.infomaniak.com/1/my_ksuite/${mykSuiteId}`,
@@ -3494,6 +3496,7 @@ export class InfomaniakCoreResources implements INodeType {
 							const options: IHttpRequestOptions = {
 								method: 'GET' as IHttpRequestMethods,
 								headers: {
+									Authorization: `Bearer ${credentials.apiToken}`,
 									'Content-Type': 'application/json',
 								},
 								url: 'https://api.infomaniak.com/1/my_ksuite/current',
@@ -3517,6 +3520,7 @@ export class InfomaniakCoreResources implements INodeType {
 							const options: IHttpRequestOptions = {
 								method: 'POST' as IHttpRequestMethods,
 								headers: {
+									Authorization: `Bearer ${credentials.apiToken}`,
 									'Content-Type': 'application/json',
 								},
 								url: `https://api.infomaniak.com/1/my_ksuite/${mykSuiteId}/cancel_unsubscribe`,
