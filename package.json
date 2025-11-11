@@ -42,7 +42,8 @@
     ],
     "nodes": [
       "dist/nodes/InfomaniakCoreResources/InfomaniakCoreResources.node.js",
-      "dist/nodes/InfomaniakDNS/InfomaniakDns.node.js"
+      "dist/nodes/InfomaniakDNS/InfomaniakDns.node.js",
+      "dist/nodes/InfomaniakEmail/InfomaniakEmail.node.js"
     ]
   },
   "devDependencies": {
