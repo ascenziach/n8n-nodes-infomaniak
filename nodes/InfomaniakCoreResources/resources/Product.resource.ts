@@ -4,7 +4,7 @@
  * Handles operations related to Infomaniak Products
  */
 
-import { IExecuteFunctions, INodeExecutionData } from 'n8n-workflow';
+import { IExecuteFunctions, INodeExecutionData , IDataObject } from 'n8n-workflow';
 import { infomaniakApiRequestGET, applyPagination } from '../utils';
 import { Product } from '../types';
 
@@ -47,6 +47,6 @@ export class ProductResource {
 		const paginatedData = applyPagination(data, returnAll, limit);
 
 		// Return as n8n data
-		return context.helpers.returnJsonArray(paginatedData as unknown as any);
+		return context.helpers.returnJsonArray(paginatedData as unknown as IDataObject[]);
 	}
 }

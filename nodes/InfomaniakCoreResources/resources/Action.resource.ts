@@ -4,7 +4,7 @@
  * Handles operations related to Infomaniak Actions
  */
 
-import { IExecuteFunctions, INodeExecutionData } from 'n8n-workflow';
+import { IExecuteFunctions, INodeExecutionData, IDataObject } from 'n8n-workflow';
 import { infomaniakApiRequestGET, buildQueryString, applyPagination } from '../utils';
 import { Action } from '../types';
 
@@ -39,7 +39,7 @@ export class ActionResource {
 		const limit = context.getNodeParameter('limit', itemIndex, 50) as number;
 
 		// Build query string
-		const qs: any = buildQueryString({
+		const qs = buildQueryString({
 			...(search && { search }),
 		});
 
@@ -55,7 +55,7 @@ export class ActionResource {
 		const paginatedData = applyPagination(data, returnAll, limit);
 
 		// Return as n8n data
-		return context.helpers.returnJsonArray(paginatedData as unknown as any);
+		return context.helpers.returnJsonArray(paginatedData as unknown as IDataObject[]);
 	}
 
 	/**
@@ -77,6 +77,6 @@ export class ActionResource {
 		);
 
 		// Return as n8n data
-		return context.helpers.returnJsonArray(data as unknown as any);
+		return context.helpers.returnJsonArray(data as unknown as IDataObject);
 	}
 }

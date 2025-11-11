@@ -5,7 +5,7 @@
  * Note: Most kSuite operations use v2 API endpoints
  */
 
-import { IExecuteFunctions, INodeExecutionData } from 'n8n-workflow';
+import { IExecuteFunctions, INodeExecutionData , IDataObject } from 'n8n-workflow';
 import {
 	infomaniakApiRequestGET,
 	infomaniakApiRequestPOST,
@@ -108,7 +108,7 @@ export class KSuiteResource {
 			itemIndex,
 		);
 
-		return context.helpers.returnJsonArray(data as unknown as any);
+		return context.helpers.returnJsonArray(data as unknown as IDataObject);
 	}
 
 	/**
@@ -121,7 +121,7 @@ export class KSuiteResource {
 	): Promise<INodeExecutionData[]> {
 		const mailboxData = context.getNodeParameter('mailboxData', itemIndex) as Record<string, unknown>;
 
-		const body: any = {
+		const body: Record<string, unknown> = {
 			password: mailboxData.password,
 		};
 
@@ -137,7 +137,7 @@ export class KSuiteResource {
 			itemIndex,
 		);
 
-		return context.helpers.returnJsonArray(data as unknown as any);
+		return context.helpers.returnJsonArray(data as unknown as IDataObject);
 	}
 
 	/**
@@ -175,7 +175,7 @@ export class KSuiteResource {
 		const mailboxId = context.getNodeParameter('mailboxId', itemIndex) as string;
 		const newPassword = context.getNodeParameter('newPassword', itemIndex) as string;
 
-		const body: any = {
+		const body: Record<string, unknown> = {
 			password: newPassword,
 		};
 
@@ -229,7 +229,7 @@ export class KSuiteResource {
 
 		const qsObj: any = {};
 		if (additionalOptions.with) qsObj.with = additionalOptions.with;
-		const qs: any = buildQueryString(qsObj);
+		const qs = buildQueryString(qsObj);
 
 		const data = await infomaniakApiRequestGET<MySuite>(
 			context,
@@ -238,7 +238,7 @@ export class KSuiteResource {
 			itemIndex,
 		);
 
-		return context.helpers.returnJsonArray(data as unknown as any);
+		return context.helpers.returnJsonArray(data as unknown as IDataObject);
 	}
 
 	/**
@@ -253,7 +253,7 @@ export class KSuiteResource {
 
 		const qsObj: any = {};
 		if (additionalOptions.with) qsObj.with = additionalOptions.with;
-		const qs: any = buildQueryString(qsObj);
+		const qs = buildQueryString(qsObj);
 
 		const data = await infomaniakApiRequestGET<MySuite>(
 			context,
@@ -262,7 +262,7 @@ export class KSuiteResource {
 			itemIndex,
 		);
 
-		return context.helpers.returnJsonArray(data as unknown as any);
+		return context.helpers.returnJsonArray(data as unknown as IDataObject);
 	}
 
 	/**

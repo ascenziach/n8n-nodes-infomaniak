@@ -5,7 +5,7 @@
  * Note: Profile API uses v2 endpoints
  */
 
-import { IExecuteFunctions, INodeExecutionData } from 'n8n-workflow';
+import { IExecuteFunctions, INodeExecutionData , IDataObject } from 'n8n-workflow';
 import {
 	infomaniakApiRequestGET,
 	infomaniakApiRequestPOST,
@@ -62,7 +62,7 @@ export class ProfileResource {
 
 		const qsObj: any = {};
 		if (profileOptions.with) qsObj.with = profileOptions.with;
-		const qs: any = buildQueryString(qsObj);
+		const qs = buildQueryString(qsObj);
 
 		// Use v2 API
 		const data = await infomaniakApiRequest<Profile>(
@@ -74,7 +74,7 @@ export class ProfileResource {
 			itemIndex,
 		);
 
-		return context.helpers.returnJsonArray(data as unknown as any);
+		return context.helpers.returnJsonArray(data as unknown as IDataObject);
 	}
 
 	/**
@@ -87,7 +87,7 @@ export class ProfileResource {
 	): Promise<INodeExecutionData[]> {
 		const profileData = context.getNodeParameter('profileData', itemIndex) as Record<string, unknown>;
 
-		const bodyObj: any = {};
+		const bodyObj: Record<string, unknown> = {};
 		if (profileData.email) bodyObj.email = profileData.email;
 		if (profileData.firstname) bodyObj.firstname = profileData.firstname;
 		if (profileData.lastname) bodyObj.lastname = profileData.lastname;
@@ -107,7 +107,7 @@ export class ProfileResource {
 			itemIndex,
 		);
 
-		return context.helpers.returnJsonArray(data as unknown as any);
+		return context.helpers.returnJsonArray(data as unknown as IDataObject);
 	}
 
 	/**
@@ -120,7 +120,7 @@ export class ProfileResource {
 	): Promise<INodeExecutionData[]> {
 		const avatarData = context.getNodeParameter('avatarData', itemIndex) as Record<string, unknown>;
 
-		const body: any = {
+		const body: Record<string, unknown> = {
 			avatar: avatarData.avatar,
 			encoding: avatarData.encoding || 'base64',
 		};
@@ -133,7 +133,7 @@ export class ProfileResource {
 			itemIndex,
 		);
 
-		return context.helpers.returnJsonArray(data as unknown as any);
+		return context.helpers.returnJsonArray(data as unknown as IDataObject);
 	}
 
 	/**
@@ -167,7 +167,7 @@ export class ProfileResource {
 			itemIndex,
 		);
 
-		return context.helpers.returnJsonArray(data as unknown as any);
+		return context.helpers.returnJsonArray(data as unknown as IDataObject);
 	}
 
 	/**
@@ -186,7 +186,7 @@ export class ProfileResource {
 			itemIndex,
 		);
 
-		return context.helpers.returnJsonArray(data as unknown as any);
+		return context.helpers.returnJsonArray(data as unknown as IDataObject);
 	}
 
 	/**
@@ -206,7 +206,7 @@ export class ProfileResource {
 			itemIndex,
 		);
 
-		return context.helpers.returnJsonArray(data as unknown as any);
+		return context.helpers.returnJsonArray(data as unknown as IDataObject);
 	}
 
 	/**
@@ -224,7 +224,7 @@ export class ProfileResource {
 			itemIndex,
 		);
 
-		return context.helpers.returnJsonArray(data as unknown as any);
+		return context.helpers.returnJsonArray(data as unknown as IDataObject);
 	}
 
 	/**
@@ -244,7 +244,7 @@ export class ProfileResource {
 			itemIndex,
 		);
 
-		return context.helpers.returnJsonArray(data as unknown as any);
+		return context.helpers.returnJsonArray(data as unknown as IDataObject);
 	}
 
 	/**
@@ -285,7 +285,7 @@ export class ProfileResource {
 			itemIndex,
 		);
 
-		return context.helpers.returnJsonArray(data as unknown as any);
+		return context.helpers.returnJsonArray(data as unknown as IDataObject);
 	}
 
 	/**
@@ -305,7 +305,7 @@ export class ProfileResource {
 			itemIndex,
 		);
 
-		return context.helpers.returnJsonArray(data as unknown as any);
+		return context.helpers.returnJsonArray(data as unknown as IDataObject);
 	}
 
 	/**

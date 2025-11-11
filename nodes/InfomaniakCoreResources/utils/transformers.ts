@@ -87,7 +87,7 @@ export function keysToSnake<T = Record<string, unknown>>(obj: unknown): T {
  * @param params - Parameters object with camelCase keys
  * @returns Query string object with snake_case keys
  */
-export function buildQueryString(params: Record<string, unknown>): Record<string, unknown> {
+export function buildQueryString(params: Record<string, unknown>): any {
 	const qs: Record<string, unknown> = {};
 
 	for (const [key, value] of Object.entries(params)) {

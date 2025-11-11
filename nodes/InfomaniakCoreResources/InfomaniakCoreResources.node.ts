@@ -181,7 +181,7 @@ export class InfomaniakCoreResources implements INodeType {
 					{
 						name: 'Get Public Cloud Status',
 						value: 'getPublicCloudStatus',
-
+						description: 'Get the current status of Infomaniak Public Cloud',
 						action: 'Get public cloud status',
 					},
 				],

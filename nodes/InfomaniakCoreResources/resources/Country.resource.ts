@@ -4,7 +4,7 @@
  * Handles operations related to Infomaniak Countries
  */
 
-import { IExecuteFunctions, INodeExecutionData } from 'n8n-workflow';
+import { IExecuteFunctions, INodeExecutionData, IDataObject } from 'n8n-workflow';
 import { infomaniakApiRequestGET, buildQueryString, applyPagination, parseIdArray } from '../utils';
 import { Country } from '../types';
 
@@ -55,7 +55,7 @@ export class CountryResource {
 		if (additionalOptions.order) qsObj.order = additionalOptions.order;
 		if (additionalOptions.page) qsObj.page = additionalOptions.page;
 		if (additionalOptions.perPage) qsObj.perPage = additionalOptions.perPage;
-		const qs: any = buildQueryString(qsObj);
+		const qs = buildQueryString(qsObj);
 
 		// Make API request
 		const data = await infomaniakApiRequestGET<Country[]>(
@@ -69,7 +69,7 @@ export class CountryResource {
 		const paginatedData = applyPagination(data, returnAll, limit);
 
 		// Return as n8n data
-		return context.helpers.returnJsonArray(paginatedData as unknown as any);
+		return context.helpers.returnJsonArray(paginatedData as unknown as IDataObject[]);
 	}
 
 	/**
@@ -91,6 +91,6 @@ export class CountryResource {
 		);
 
 		// Return as n8n data
-		return context.helpers.returnJsonArray(data as unknown as any);
+		return context.helpers.returnJsonArray(data as unknown as IDataObject);
 	}
 }

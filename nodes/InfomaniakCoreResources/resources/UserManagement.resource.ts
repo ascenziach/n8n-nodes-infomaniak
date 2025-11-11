@@ -4,7 +4,7 @@
  * Handles operations related to users, accounts, teams, and invitations
  */
 
-import { IExecuteFunctions, INodeExecutionData, NodeOperationError } from 'n8n-workflow';
+import { IExecuteFunctions, INodeExecutionData, NodeOperationError , IDataObject } from 'n8n-workflow';
 import {
 	infomaniakApiRequestGET,
 	infomaniakApiRequestPOST,
@@ -65,12 +65,21 @@ export class UserManagementResource {
 		operation: string,
 		itemIndex: number,
 	): Promise<INodeExecutionData[]> {
-		if (operation === 'listAccounts') {
-			return await this.listAccounts(context, itemIndex);
-		} else if (operation === 'getAccount') {
-			return await this.getAccount(context, itemIndex);
-		} else if (operation === 'listUsers') {
-			return await this.listUsers(context, itemIndex);
+		const operationMap: Record<string, () => Promise<INodeExecutionData[]>> = {
+			listAccounts: () => this.listAccounts(context, itemIndex),
+			getAccount: () => this.getAccount(context, itemIndex),
+			getAccountTags: () => this.getAccountTags(context, itemIndex),
+			listAccountProducts: () => this.listAccountProducts(context, itemIndex),
+			listAccountServices: () => this.listAccountServices(context, itemIndex),
+			listBasicTeams: () => this.listBasicTeams(context, itemIndex),
+			listCurrentAccountProducts: () => this.listCurrentAccountProducts(context, itemIndex),
+			listUserAppAccesses: () => this.listUserAppAccesses(context, itemIndex),
+			listUsers: () => this.listUsers(context, itemIndex),
+		};
+
+		const handler = operationMap[operation];
+		if (handler) {
+			return await handler();
 		}
 
 		return [];
@@ -90,6 +99,9 @@ export class UserManagementResource {
 			getTeam: () => this.getTeam(context, itemIndex),
 			updateTeam: () => this.updateTeam(context, itemIndex),
 			deleteTeam: () => this.deleteTeam(context, itemIndex),
+			listTeamUsers: () => this.listTeamUsers(context, itemIndex),
+			addUsersToTeam: () => this.addUsersToTeam(context, itemIndex),
+			removeUsersFromTeam: () => this.removeUsersFromTeam(context, itemIndex),
 		};
 
 		const handler = operationMap[operation];
@@ -123,7 +135,7 @@ export class UserManagementResource {
 		validateNonEmptyString(lastName, 'Last Name');
 
 		// Build request body
-		const body: any = {
+		const body: Record<string, unknown> = {
 			email: email.trim(),
 			first_name: firstName.trim(),
 			last_name: lastName.trim(),
@@ -160,7 +172,7 @@ export class UserManagementResource {
 				itemIndex,
 			);
 
-			return context.helpers.returnJsonArray(data as unknown as any);
+			return context.helpers.returnJsonArray(data as unknown as IDataObject);
 		} catch (error: unknown) {
 			// Enhanced error reporting for 422 errors
 			if (error && typeof error === 'object' && 'httpCode' in error && error.httpCode === '422') {
@@ -213,7 +225,7 @@ export class UserManagementResource {
 			itemIndex,
 		);
 
-		return context.helpers.returnJsonArray(data as unknown as any);
+		return context.helpers.returnJsonArray(data as unknown as IDataObject);
 	}
 
 	/**
@@ -233,7 +245,7 @@ export class UserManagementResource {
 			itemIndex,
 		);
 
-		return context.helpers.returnJsonArray(data as unknown as any);
+		return context.helpers.returnJsonArray(data as unknown as IDataObject);
 	}
 
 	/**
@@ -254,7 +266,7 @@ export class UserManagementResource {
 			itemIndex,
 		);
 
-		return context.helpers.returnJsonArray(data as unknown as any);
+		return context.helpers.returnJsonArray(data as unknown as IDataObject);
 	}
 
 	/**
@@ -274,7 +286,7 @@ export class UserManagementResource {
 			itemIndex,
 		);
 
-		return context.helpers.returnJsonArray(data as unknown as any);
+		return context.helpers.returnJsonArray(data as unknown as IDataObject);
 	}
 
 	/**
@@ -292,7 +304,7 @@ export class UserManagementResource {
 		const teamName = validateNonEmptyString(teamData.name, 'Team Name');
 
 		// Build request body
-		const body: any = {
+		const body: Record<string, unknown> = {
 			name: teamName,
 		};
 
@@ -312,7 +324,7 @@ export class UserManagementResource {
 			itemIndex,
 		);
 
-		return context.helpers.returnJsonArray(data as unknown as any);
+		return context.helpers.returnJsonArray(data as unknown as IDataObject);
 	}
 
 	/**
@@ -333,7 +345,7 @@ export class UserManagementResource {
 			itemIndex,
 		);
 
-		return context.helpers.returnJsonArray(data as unknown as any);
+		return context.helpers.returnJsonArray(data as unknown as IDataObject);
 	}
 
 	/**
@@ -349,7 +361,7 @@ export class UserManagementResource {
 		const teamData = context.getNodeParameter('teamData', itemIndex) as Record<string, unknown>;
 
 		// Build request body - only include provided fields
-		const bodyObj: any = {};
+		const bodyObj: Record<string, unknown> = {};
 		if (teamData.name && typeof teamData.name === 'string' && teamData.name.trim()) {
 			bodyObj.name = teamData.name.trim();
 		}
@@ -370,7 +382,7 @@ export class UserManagementResource {
 			itemIndex,
 		);
 
-		return context.helpers.returnJsonArray(data as unknown as any);
+		return context.helpers.returnJsonArray(data as unknown as IDataObject);
 	}
 
 	/**
@@ -394,6 +406,208 @@ export class UserManagementResource {
 		return context.helpers.returnJsonArray({
 			success: true,
 			message: `Team ${teamId} deleted successfully`,
+		});
+	}
+
+	/**
+	 * Get account tags
+	 * GET /accounts/{account}/tags
+	 */
+	private static async getAccountTags(
+		context: IExecuteFunctions,
+		itemIndex: number,
+	): Promise<INodeExecutionData[]> {
+		const accountId = context.getNodeParameter('accountId', itemIndex) as string;
+
+		const data = await infomaniakApiRequestGET(
+			context,
+			`/accounts/${accountId}/tags`,
+			undefined,
+			itemIndex,
+		);
+
+		return context.helpers.returnJsonArray(data as unknown as IDataObject);
+	}
+
+	/**
+	 * List account products
+	 * GET /accounts/{account}/products
+	 */
+	private static async listAccountProducts(
+		context: IExecuteFunctions,
+		itemIndex: number,
+	): Promise<INodeExecutionData[]> {
+		const accountId = context.getNodeParameter('accountId', itemIndex) as string;
+
+		const data = await infomaniakApiRequestGET(
+			context,
+			`/accounts/${accountId}/products`,
+			undefined,
+			itemIndex,
+		);
+
+		return context.helpers.returnJsonArray(data as unknown as IDataObject);
+	}
+
+	/**
+	 * List account services
+	 * GET /accounts/{account}/services
+	 */
+	private static async listAccountServices(
+		context: IExecuteFunctions,
+		itemIndex: number,
+	): Promise<INodeExecutionData[]> {
+		const accountId = context.getNodeParameter('accountId', itemIndex) as string;
+
+		const data = await infomaniakApiRequestGET(
+			context,
+			`/accounts/${accountId}/services`,
+			undefined,
+			itemIndex,
+		);
+
+		return context.helpers.returnJsonArray(data as unknown as IDataObject);
+	}
+
+	/**
+	 * List basic teams
+	 * GET /accounts/{account}/basic_teams
+	 */
+	private static async listBasicTeams(
+		context: IExecuteFunctions,
+		itemIndex: number,
+	): Promise<INodeExecutionData[]> {
+		const accountId = context.getNodeParameter('accountId', itemIndex) as string;
+
+		const data = await infomaniakApiRequestGET(
+			context,
+			`/accounts/${accountId}/basic_teams`,
+			undefined,
+			itemIndex,
+		);
+
+		return context.helpers.returnJsonArray(data as unknown as IDataObject);
+	}
+
+	/**
+	 * List current account products
+	 * GET /accounts/current/products
+	 */
+	private static async listCurrentAccountProducts(
+		context: IExecuteFunctions,
+		itemIndex: number,
+	): Promise<INodeExecutionData[]> {
+		const data = await infomaniakApiRequestGET(
+			context,
+			'/accounts/current/products',
+			undefined,
+			itemIndex,
+		);
+
+		return context.helpers.returnJsonArray(data as unknown as IDataObject);
+	}
+
+	/**
+	 * List user app accesses
+	 * GET /accounts/{account}/users/{user}/app_accesses
+	 */
+	private static async listUserAppAccesses(
+		context: IExecuteFunctions,
+		itemIndex: number,
+	): Promise<INodeExecutionData[]> {
+		const accountId = context.getNodeParameter('accountId', itemIndex) as string;
+		const userId = context.getNodeParameter('userId', itemIndex) as string;
+
+		const data = await infomaniakApiRequestGET(
+			context,
+			`/accounts/${accountId}/users/${userId}/app_accesses`,
+			undefined,
+			itemIndex,
+		);
+
+		return context.helpers.returnJsonArray(data as unknown as IDataObject);
+	}
+
+	/**
+	 * List team users
+	 * GET /accounts/{account}/teams/{team}/users
+	 */
+	private static async listTeamUsers(
+		context: IExecuteFunctions,
+		itemIndex: number,
+	): Promise<INodeExecutionData[]> {
+		const accountId = context.getNodeParameter('accountId', itemIndex) as string;
+		const teamId = context.getNodeParameter('teamId', itemIndex) as string;
+
+		const data = await infomaniakApiRequestGET<User[]>(
+			context,
+			`/accounts/${accountId}/teams/${teamId}/users`,
+			undefined,
+			itemIndex,
+		);
+
+		return context.helpers.returnJsonArray(data as unknown as IDataObject);
+	}
+
+	/**
+	 * Add users to team
+	 * POST /accounts/{account}/teams/{team}/users
+	 */
+	private static async addUsersToTeam(
+		context: IExecuteFunctions,
+		itemIndex: number,
+	): Promise<INodeExecutionData[]> {
+		const accountId = context.getNodeParameter('accountId', itemIndex) as string;
+		const teamId = context.getNodeParameter('teamId', itemIndex) as string;
+		const users = context.getNodeParameter('users', itemIndex) as string;
+
+		// Parse user IDs
+		const userIds = parseIdArray(users);
+
+		const body: Record<string, unknown> = {
+			users: userIds,
+		};
+
+		const data = await infomaniakApiRequestPOST(
+			context,
+			`/accounts/${accountId}/teams/${teamId}/users`,
+			body,
+			undefined,
+			itemIndex,
+		);
+
+		return context.helpers.returnJsonArray(data as unknown as IDataObject);
+	}
+
+	/**
+	 * Remove users from team
+	 * DELETE /accounts/{account}/teams/{team}/users
+	 */
+	private static async removeUsersFromTeam(
+		context: IExecuteFunctions,
+		itemIndex: number,
+	): Promise<INodeExecutionData[]> {
+		const accountId = context.getNodeParameter('accountId', itemIndex) as string;
+		const teamId = context.getNodeParameter('teamId', itemIndex) as string;
+		const users = context.getNodeParameter('users', itemIndex) as string;
+
+		// Parse user IDs
+		const userIds = parseIdArray(users);
+
+		const body: Record<string, unknown> = {
+			users: userIds,
+		};
+
+		await infomaniakApiRequestDELETE(
+			context,
+			`/accounts/${accountId}/teams/${teamId}/users`,
+			body as any,
+			itemIndex,
+		);
+
+		return context.helpers.returnJsonArray({
+			success: true,
+			message: `Users removed from team ${teamId} successfully`,
 		});
 	}
 }
