@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-infomaniak",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "description": "n8n node for Infomaniak API integration",
   "keywords": [
     "n8n-community-node-package",
