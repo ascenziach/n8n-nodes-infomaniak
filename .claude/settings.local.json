@@ -25,7 +25,8 @@
       "WebFetch(domain:developer.infomaniak.com)",
       "Bash(InfomaniakCoreResources.node.new.ts)",
       "Bash(find:*)",
-      "Bash(FILTER_BRANCH_SQUELCH_WARNING=1 git filter-branch:*)"
+      "Bash(FILTER_BRANCH_SQUELCH_WARNING=1 git filter-branch:*)",
+      "Bash(node -e:*)"
     ],
     "deny": [],
     "ask": []
