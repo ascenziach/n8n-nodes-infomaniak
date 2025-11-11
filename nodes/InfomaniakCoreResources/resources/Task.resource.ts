@@ -18,9 +18,9 @@ export class TaskResource {
 		itemIndex: number,
 	): Promise<INodeExecutionData[]> {
 		if (operation === 'getAll') {
-			return await this.getAll(context, itemIndex);
+			return await TaskResource.getAll(context, itemIndex);
 		} else if (operation === 'get') {
-			return await this.get(context, itemIndex);
+			return await TaskResource.get(context, itemIndex);
 		}
 
 		return [];

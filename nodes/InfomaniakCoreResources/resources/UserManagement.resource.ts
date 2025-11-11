@@ -30,11 +30,11 @@ export class UserManagementResource {
 		const subResource = context.getNodeParameter('subResource', itemIndex) as string;
 
 		if (subResource === 'core') {
-			return await this.executeCore(context, operation, itemIndex);
+			return await UserManagementResource.executeCore(context, operation, itemIndex);
 		} else if (subResource === 'accounts') {
-			return await this.executeAccounts(context, operation, itemIndex);
+			return await UserManagementResource.executeAccounts(context, operation, itemIndex);
 		} else if (subResource === 'teams') {
-			return await this.executeTeams(context, operation, itemIndex);
+			return await UserManagementResource.executeTeams(context, operation, itemIndex);
 		}
 
 		return [];
@@ -49,9 +49,9 @@ export class UserManagementResource {
 		itemIndex: number,
 	): Promise<INodeExecutionData[]> {
 		if (operation === 'inviteUser') {
-			return await this.inviteUser(context, itemIndex);
+			return await UserManagementResource.inviteUser(context, itemIndex);
 		} else if (operation === 'cancelInvitation') {
-			return await this.cancelInvitation(context, itemIndex);
+			return await UserManagementResource.cancelInvitation(context, itemIndex);
 		}
 
 		return [];
@@ -66,15 +66,15 @@ export class UserManagementResource {
 		itemIndex: number,
 	): Promise<INodeExecutionData[]> {
 		const operationMap: Record<string, () => Promise<INodeExecutionData[]>> = {
-			listAccounts: () => this.listAccounts(context, itemIndex),
-			getAccount: () => this.getAccount(context, itemIndex),
-			getAccountTags: () => this.getAccountTags(context, itemIndex),
-			listAccountProducts: () => this.listAccountProducts(context, itemIndex),
-			listAccountServices: () => this.listAccountServices(context, itemIndex),
-			listBasicTeams: () => this.listBasicTeams(context, itemIndex),
-			listCurrentAccountProducts: () => this.listCurrentAccountProducts(context, itemIndex),
-			listUserAppAccesses: () => this.listUserAppAccesses(context, itemIndex),
-			listUsers: () => this.listUsers(context, itemIndex),
+			listAccounts: () => UserManagementResource.listAccounts(context, itemIndex),
+			getAccount: () => UserManagementResource.getAccount(context, itemIndex),
+			getAccountTags: () => UserManagementResource.getAccountTags(context, itemIndex),
+			listAccountProducts: () => UserManagementResource.listAccountProducts(context, itemIndex),
+			listAccountServices: () => UserManagementResource.listAccountServices(context, itemIndex),
+			listBasicTeams: () => UserManagementResource.listBasicTeams(context, itemIndex),
+			listCurrentAccountProducts: () => UserManagementResource.listCurrentAccountProducts(context, itemIndex),
+			listUserAppAccesses: () => UserManagementResource.listUserAppAccesses(context, itemIndex),
+			listUsers: () => UserManagementResource.listUsers(context, itemIndex),
 		};
 
 		const handler = operationMap[operation];
@@ -94,14 +94,14 @@ export class UserManagementResource {
 		itemIndex: number,
 	): Promise<INodeExecutionData[]> {
 		const operationMap: Record<string, () => Promise<INodeExecutionData[]>> = {
-			listTeams: () => this.listTeams(context, itemIndex),
-			createTeam: () => this.createTeam(context, itemIndex),
-			getTeam: () => this.getTeam(context, itemIndex),
-			updateTeam: () => this.updateTeam(context, itemIndex),
-			deleteTeam: () => this.deleteTeam(context, itemIndex),
-			listTeamUsers: () => this.listTeamUsers(context, itemIndex),
-			addUsersToTeam: () => this.addUsersToTeam(context, itemIndex),
-			removeUsersFromTeam: () => this.removeUsersFromTeam(context, itemIndex),
+			listTeams: () => UserManagementResource.listTeams(context, itemIndex),
+			createTeam: () => UserManagementResource.createTeam(context, itemIndex),
+			getTeam: () => UserManagementResource.getTeam(context, itemIndex),
+			updateTeam: () => UserManagementResource.updateTeam(context, itemIndex),
+			deleteTeam: () => UserManagementResource.deleteTeam(context, itemIndex),
+			listTeamUsers: () => UserManagementResource.listTeamUsers(context, itemIndex),
+			addUsersToTeam: () => UserManagementResource.addUsersToTeam(context, itemIndex),
+			removeUsersFromTeam: () => UserManagementResource.removeUsersFromTeam(context, itemIndex),
 		};
 
 		const handler = operationMap[operation];

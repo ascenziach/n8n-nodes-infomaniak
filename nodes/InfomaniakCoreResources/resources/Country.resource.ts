@@ -18,9 +18,9 @@ export class CountryResource {
 		itemIndex: number,
 	): Promise<INodeExecutionData[]> {
 		if (operation === 'getAll') {
-			return await this.getAll(context, itemIndex);
+			return await CountryResource.getAll(context, itemIndex);
 		} else if (operation === 'get') {
-			return await this.get(context, itemIndex);
+			return await CountryResource.get(context, itemIndex);
 		}
 
 		return [];

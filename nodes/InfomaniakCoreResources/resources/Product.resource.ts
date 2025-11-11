@@ -18,7 +18,7 @@ export class ProductResource {
 		itemIndex: number,
 	): Promise<INodeExecutionData[]> {
 		if (operation === 'getAll') {
-			return await this.getAll(context, itemIndex);
+			return await ProductResource.getAll(context, itemIndex);
 		}
 
 		return [];

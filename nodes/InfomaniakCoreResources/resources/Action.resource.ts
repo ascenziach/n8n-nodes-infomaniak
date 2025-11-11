@@ -18,9 +18,9 @@ export class ActionResource {
 		itemIndex: number,
 	): Promise<INodeExecutionData[]> {
 		if (operation === 'getAll') {
-			return await this.getAll(context, itemIndex);
+			return await ActionResource.getAll(context, itemIndex);
 		} else if (operation === 'get') {
-			return await this.get(context, itemIndex);
+			return await ActionResource.get(context, itemIndex);
 		}
 
 		return [];

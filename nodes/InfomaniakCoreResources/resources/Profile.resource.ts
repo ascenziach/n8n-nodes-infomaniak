@@ -27,19 +27,19 @@ export class ProfileResource {
 		itemIndex: number,
 	): Promise<INodeExecutionData[]> {
 		const operationMap: Record<string, () => Promise<INodeExecutionData[]>> = {
-			get: () => this.get(context, itemIndex),
-			update: () => this.update(context, itemIndex),
-			uploadAvatar: () => this.uploadAvatar(context, itemIndex),
-			deleteAvatar: () => this.deleteAvatar(context, itemIndex),
-			getAppPasswords: () => this.getAppPasswords(context, itemIndex),
-			createAppPassword: () => this.createAppPassword(context, itemIndex),
-			getAppPassword: () => this.getAppPassword(context, itemIndex),
-			getEmails: () => this.getEmails(context, itemIndex),
-			getEmail: () => this.getEmail(context, itemIndex),
-			deleteEmail: () => this.deleteEmail(context, itemIndex),
-			getPhones: () => this.getPhones(context, itemIndex),
-			getPhone: () => this.getPhone(context, itemIndex),
-			deletePhone: () => this.deletePhone(context, itemIndex),
+			get: () => ProfileResource.get(context, itemIndex),
+			update: () => ProfileResource.update(context, itemIndex),
+			uploadAvatar: () => ProfileResource.uploadAvatar(context, itemIndex),
+			deleteAvatar: () => ProfileResource.deleteAvatar(context, itemIndex),
+			getAppPasswords: () => ProfileResource.getAppPasswords(context, itemIndex),
+			createAppPassword: () => ProfileResource.createAppPassword(context, itemIndex),
+			getAppPassword: () => ProfileResource.getAppPassword(context, itemIndex),
+			getEmails: () => ProfileResource.getEmails(context, itemIndex),
+			getEmail: () => ProfileResource.getEmail(context, itemIndex),
+			deleteEmail: () => ProfileResource.deleteEmail(context, itemIndex),
+			getPhones: () => ProfileResource.getPhones(context, itemIndex),
+			getPhone: () => ProfileResource.getPhone(context, itemIndex),
+			deletePhone: () => ProfileResource.deletePhone(context, itemIndex),
 		};
 
 		const handler = operationMap[operation];

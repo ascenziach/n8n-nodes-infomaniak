@@ -18,9 +18,9 @@ export class TimezoneResource {
 		itemIndex: number,
 	): Promise<INodeExecutionData[]> {
 		if (operation === 'getAll') {
-			return await this.getAll(context, itemIndex);
+			return await TimezoneResource.getAll(context, itemIndex);
 		} else if (operation === 'get') {
-			return await this.get(context, itemIndex);
+			return await TimezoneResource.get(context, itemIndex);
 		}
 
 		return [];

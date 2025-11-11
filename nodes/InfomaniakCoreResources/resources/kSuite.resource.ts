@@ -27,11 +27,11 @@ export class KSuiteResource {
 		const subResource = context.getNodeParameter('kSuiteSubResource', itemIndex) as string;
 
 		if (subResource === 'workspace') {
-			return await this.executeWorkspace(context, operation, itemIndex);
+			return await KSuiteResource.executeWorkspace(context, operation, itemIndex);
 		} else if (subResource === 'mykSuite') {
-			return await this.executeMykSuite(context, operation, itemIndex);
+			return await KSuiteResource.executeMykSuite(context, operation, itemIndex);
 		} else if (subResource === 'productManagement') {
-			return await this.executeProductManagement(context, operation, itemIndex);
+			return await KSuiteResource.executeProductManagement(context, operation, itemIndex);
 		}
 
 		return [];
@@ -46,11 +46,11 @@ export class KSuiteResource {
 		itemIndex: number,
 	): Promise<INodeExecutionData[]> {
 		const operationMap: Record<string, () => Promise<INodeExecutionData[]>> = {
-			getWorkspaceUsers: () => this.getWorkspaceUsers(context, itemIndex),
-			attachMailbox: () => this.attachMailbox(context, itemIndex),
-			setPrimaryMailbox: () => this.setPrimaryMailbox(context, itemIndex),
-			updateMailboxPassword: () => this.updateMailboxPassword(context, itemIndex),
-			unlinkMailbox: () => this.unlinkMailbox(context, itemIndex),
+			getWorkspaceUsers: () => KSuiteResource.getWorkspaceUsers(context, itemIndex),
+			attachMailbox: () => KSuiteResource.attachMailbox(context, itemIndex),
+			setPrimaryMailbox: () => KSuiteResource.setPrimaryMailbox(context, itemIndex),
+			updateMailboxPassword: () => KSuiteResource.updateMailboxPassword(context, itemIndex),
+			unlinkMailbox: () => KSuiteResource.unlinkMailbox(context, itemIndex),
 		};
 
 		const handler = operationMap[operation];
@@ -70,9 +70,9 @@ export class KSuiteResource {
 		itemIndex: number,
 	): Promise<INodeExecutionData[]> {
 		if (operation === 'getMykSuite') {
-			return await this.getMykSuite(context, itemIndex);
+			return await KSuiteResource.getMykSuite(context, itemIndex);
 		} else if (operation === 'getCurrentMykSuite') {
-			return await this.getCurrentMykSuite(context, itemIndex);
+			return await KSuiteResource.getCurrentMykSuite(context, itemIndex);
 		}
 
 		return [];
@@ -87,7 +87,7 @@ export class KSuiteResource {
 		itemIndex: number,
 	): Promise<INodeExecutionData[]> {
 		if (operation === 'cancelUnsubscribe') {
-			return await this.cancelUnsubscribe(context, itemIndex);
+			return await KSuiteResource.cancelUnsubscribe(context, itemIndex);
 		}
 
 		return [];
