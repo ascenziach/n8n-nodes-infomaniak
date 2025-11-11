@@ -1,2 +1,38 @@
-.DS_Store
+# Source files - DO NOT PUBLISH
+nodes/
+credentials/
+
+# Development files
+.git/
+.github/
+.vscode/
+.claude/
+*.md
+!README.md
+!LICENSE.md
+
+# Test files
+test/
+tests/
+*.test.ts
+*.spec.ts
+
+# Configuration files
+.editorconfig
+.eslintrc.js
+.prettierrc
+tsconfig.json
+gulpfile.js
+jest.config.js
+
+# Build artifacts
 *.tsbuildinfo
+.DS_Store
+
+# JSON files (except package.json)
+*.json
+!package.json
+
+# Other
+node_modules/
+coverage/
