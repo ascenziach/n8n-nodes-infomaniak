@@ -44,7 +44,8 @@
       "dist/nodes/InfomaniakCoreResources/InfomaniakCoreResources.node.js",
       "dist/nodes/InfomaniakDNS/InfomaniakDns.node.js",
       "dist/nodes/InfomaniakEmail/InfomaniakEmail.node.js",
-      "dist/nodes/InfomaniakPublicCloud/InfomaniakPublicCloud.node.js"
+      "dist/nodes/InfomaniakPublicCloud/InfomaniakPublicCloud.node.js",
+      "dist/nodes/InfomaniakStreamingVideo/InfomaniakStreamingVideo.node.js"
     ]
   },
   "devDependencies": {
