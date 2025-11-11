@@ -4,6 +4,7 @@ import {
 	INodeType,
 	INodeTypeDescription,
 	NodeConnectionType,
+	NodeOperationError,
 } from 'n8n-workflow';
 
 import {
@@ -62,6 +63,11 @@ export class InfomaniakCoreResources implements INodeType {
 						description: 'Manage events in Infomaniak',
 					},
 					{
+						name: 'kSuite',
+						value: 'kSuite',
+						description: 'Manage kSuite workspaces, mailboxes and products',
+					},
+					{
 						name: 'Language',
 						value: 'language',
 						description: 'Manage languages in Infomaniak',
@@ -90,11 +96,6 @@ export class InfomaniakCoreResources implements INodeType {
 						name: 'User Management',
 						value: 'userManagement',
 						description: 'Manage users, accounts, teams and invitations',
-					},
-					{
-						name: 'kSuite',
-						value: 'kSuite',
-						description: 'Manage kSuite workspaces, mailboxes and products',
 					},
 				],
 				default: 'action',
@@ -247,10 +248,70 @@ export class InfomaniakCoreResources implements INodeType {
 				},
 				options: [
 					{
+						name: 'Create Application Password',
+						value: 'createAppPassword',
+						description: 'Create a new application password',
+						action: 'Create application password',
+					},
+					{
+						name: 'Delete Avatar',
+						value: 'deleteAvatar',
+						description: 'Delete profile avatar',
+						action: 'Delete avatar',
+					},
+					{
+						name: 'Delete Profile Email',
+						value: 'deleteEmail',
+						description: 'Delete profile email by type and ID',
+						action: 'Delete profile email',
+					},
+					{
+						name: 'Delete Profile Phone',
+						value: 'deletePhone',
+						description: 'Delete profile phone by ID',
+						action: 'Delete profile phone',
+					},
+					{
+						name: 'Get Application Password',
+						value: 'getAppPassword',
+						description: 'Get specific application password by ID',
+						action: 'Get application password',
+					},
+					{
+						name: 'Get Application Passwords',
+						value: 'getAppPasswords',
+						description: 'Get all application passwords',
+						action: 'Get application passwords',
+					},
+					{
 						name: 'Get Profile',
 						value: 'get',
 						description: 'Get current user profile information',
 						action: 'Get profile',
+					},
+					{
+						name: 'Get Profile Email',
+						value: 'getEmail',
+						description: 'Get specific profile email by type and ID',
+						action: 'Get profile email',
+					},
+					{
+						name: 'Get Profile Emails',
+						value: 'getEmails',
+						description: 'Get all profile email addresses',
+						action: 'Get profile emails',
+					},
+					{
+						name: 'Get Profile Phone',
+						value: 'getPhone',
+						description: 'Get specific profile phone by ID',
+						action: 'Get profile phone',
+					},
+					{
+						name: 'Get Profile Phones',
+						value: 'getPhones',
+						description: 'Get all profile phone numbers',
+						action: 'Get profile phones',
 					},
 					{
 						name: 'Update Profile',
@@ -263,66 +324,6 @@ export class InfomaniakCoreResources implements INodeType {
 						value: 'uploadAvatar',
 						description: 'Add or update profile avatar',
 						action: 'Upload avatar',
-					},
-					{
-						name: 'Delete Avatar',
-						value: 'deleteAvatar',
-						description: 'Delete profile avatar',
-						action: 'Delete avatar',
-					},
-					{
-						name: 'Get Application Passwords',
-						value: 'getAppPasswords',
-						description: 'Get all application passwords',
-						action: 'Get application passwords',
-					},
-					{
-						name: 'Create Application Password',
-						value: 'createAppPassword',
-						description: 'Create a new application password',
-						action: 'Create application password',
-					},
-					{
-						name: 'Get Application Password',
-						value: 'getAppPassword',
-						description: 'Get specific application password by ID',
-						action: 'Get application password',
-					},
-					{
-						name: 'Get Profile Emails',
-						value: 'getEmails',
-						description: 'Get all profile email addresses',
-						action: 'Get profile emails',
-					},
-					{
-						name: 'Get Profile Email',
-						value: 'getEmail',
-						description: 'Get specific profile email by type and ID',
-						action: 'Get profile email',
-					},
-					{
-						name: 'Delete Profile Email',
-						value: 'deleteEmail',
-						description: 'Delete profile email by type and ID',
-						action: 'Delete profile email',
-					},
-					{
-						name: 'Get Profile Phones',
-						value: 'getPhones',
-						description: 'Get all profile phone numbers',
-						action: 'Get profile phones',
-					},
-					{
-						name: 'Get Profile Phone',
-						value: 'getPhone',
-						description: 'Get specific profile phone by ID',
-						action: 'Get profile phone',
-					},
-					{
-						name: 'Delete Profile Phone',
-						value: 'deletePhone',
-						description: 'Delete profile phone by ID',
-						action: 'Delete profile phone',
 					},
 				],
 				default: 'get',
@@ -411,7 +412,7 @@ export class InfomaniakCoreResources implements INodeType {
 						operation: ['getAll'],
 					},
 				},
-				description: 'Filter to show only enabled countries',
+				description: 'Whether to show only enabled countries',
 			},
 			{
 				displayName: 'Only Enabled Exception',
@@ -595,6 +596,49 @@ export class InfomaniakCoreResources implements INodeType {
 						description: 'Filter by event type',
 					},
 					{
+						displayName: 'Is Cyber Attack',
+						name: 'isCyberattack',
+						type: 'boolean',
+						default: false,
+						description: 'Whether to filter for cyber attack events',
+					},
+					{
+						displayName: 'Locale',
+						name: 'locale',
+						type: 'options',
+						options: [
+							{
+								name: 'English',
+								value: 'en',
+							},
+							{
+								name: 'French',
+								value: 'fr',
+							},
+							{
+								name: 'German',
+								value: 'de',
+							},
+							{
+								name: 'Italian',
+								value: 'it',
+							},
+							{
+								name: 'Spanish',
+								value: 'es',
+							},
+						],
+						default: 'en',
+						description: 'Language for event descriptions',
+					},
+					{
+						displayName: 'Show Auto',
+						name: 'showAuto',
+						type: 'boolean',
+						default: false,
+						description: 'Whether to show automatic events',
+					},
+					{
 						displayName: 'Status',
 						name: 'status',
 						type: 'options',
@@ -620,61 +664,18 @@ export class InfomaniakCoreResources implements INodeType {
 						description: 'Filter by event status',
 					},
 					{
-						displayName: 'Locale',
-						name: 'locale',
-						type: 'options',
-						options: [
-							{
-								name: 'German',
-								value: 'de',
-							},
-							{
-								name: 'English',
-								value: 'en',
-							},
-							{
-								name: 'Spanish',
-								value: 'es',
-							},
-							{
-								name: 'French',
-								value: 'fr',
-							},
-							{
-								name: 'Italian',
-								value: 'it',
-							},
-						],
-						default: 'en',
-						description: 'Language for event descriptions',
-					},
-					{
-						displayName: 'Is Cyber Attack',
-						name: 'isCyberattack',
-						type: 'boolean',
-						default: false,
-						description: 'Filter for cyber attack events',
-					},
-					{
-						displayName: 'Show Auto',
-						name: 'showAuto',
-						type: 'boolean',
-						default: false,
-						description: 'Show automatic events',
+						displayName: 'User ID',
+						name: 'userId',
+						type: 'number',
+						default: '',
+						description: 'Filter by user ID',
 					},
 					{
 						displayName: 'With Trashed',
 						name: 'withTrashed',
 						type: 'boolean',
 						default: false,
-						description: 'Include deleted events',
-					},
-					{
-						displayName: 'User ID',
-						name: 'userId',
-						type: 'number',
-						default: '',
-						description: 'Filter by user ID',
+						description: 'Whether to include deleted events',
 					},
 				],
 			},
@@ -791,18 +792,18 @@ export class InfomaniakCoreResources implements INodeType {
 						description: 'Number of results per page',
 					},
 					{
+						displayName: 'Return Total Count',
+						name: 'returnTotal',
+						type: 'boolean',
+						default: false,
+						description: 'Whether to return only the total count instead of items',
+					},
+					{
 						displayName: 'Skip',
 						name: 'skip',
 						type: 'number',
 						default: 0,
 						description: 'Number of items to skip',
-					},
-					{
-						displayName: 'Return Total Count',
-						name: 'returnTotal',
-						type: 'boolean',
-						default: false,
-						description: 'Return only the total count instead of items',
 					},
 				],
 			},
@@ -986,13 +987,6 @@ export class InfomaniakCoreResources implements INodeType {
 				},
 				options: [
 					{
-						displayName: 'With',
-						name: 'with',
-						type: 'string',
-						default: '',
-						description: 'Load additional data about resources',
-					},
-					{
 						displayName: 'Order By',
 						name: 'orderBy',
 						type: 'string',
@@ -1031,6 +1025,13 @@ export class InfomaniakCoreResources implements INodeType {
 						description: 'Number of results per page',
 					},
 					{
+						displayName: 'Return Total Count',
+						name: 'returnTotal',
+						type: 'boolean',
+						default: false,
+						description: 'Whether to return only the total count instead of items',
+					},
+					{
 						displayName: 'Skip',
 						name: 'skip',
 						type: 'number',
@@ -1038,11 +1039,11 @@ export class InfomaniakCoreResources implements INodeType {
 						description: 'Number of items to skip',
 					},
 					{
-						displayName: 'Return Total Count',
-						name: 'returnTotal',
-						type: 'boolean',
-						default: false,
-						description: 'Return only the total count instead of items',
+						displayName: 'With',
+						name: 'with',
+						type: 'string',
+						default: '',
+						description: 'Load additional data about resources',
 					},
 				],
 			},
@@ -1084,6 +1085,23 @@ export class InfomaniakCoreResources implements INodeType {
 				},
 				options: [
 					{
+						displayName: 'Country ID',
+						name: 'countryId',
+						type: 'number',
+						default: '',
+						description: 'Country identifier',
+					},
+					{
+						displayName: 'Current Password',
+						name: 'currentPassword',
+						type: 'string',
+						typeOptions: {
+							password: true,
+						},
+						default: '',
+						description: 'Current password for verification',
+					},
+					{
 						displayName: 'Email',
 						name: 'email',
 						type: 'string',
@@ -1100,20 +1118,6 @@ export class InfomaniakCoreResources implements INodeType {
 						description: 'User first name (max 128 chars)',
 					},
 					{
-						displayName: 'Last Name',
-						name: 'lastname',
-						type: 'string',
-						default: '',
-						description: 'User last name (max 128 chars)',
-					},
-					{
-						displayName: 'Country ID',
-						name: 'countryId',
-						type: 'number',
-						default: '',
-						description: 'Country identifier',
-					},
-					{
 						displayName: 'Language ID',
 						name: 'languageId',
 						type: 'number',
@@ -1121,18 +1125,18 @@ export class InfomaniakCoreResources implements INodeType {
 						description: 'Language identifier',
 					},
 					{
+						displayName: 'Last Name',
+						name: 'lastname',
+						type: 'string',
+						default: '',
+						description: 'User last name (max 128 chars)',
+					},
+					{
 						displayName: 'Locale',
 						name: 'locale',
 						type: 'string',
 						default: '',
 						description: 'User locale setting',
-					},
-					{
-						displayName: 'Timezone',
-						name: 'timezone',
-						type: 'string',
-						default: '',
-						description: 'User timezone',
 					},
 					{
 						displayName: 'Password',
@@ -1145,14 +1149,11 @@ export class InfomaniakCoreResources implements INodeType {
 						description: 'New password',
 					},
 					{
-						displayName: 'Current Password',
-						name: 'currentPassword',
+						displayName: 'Timezone',
+						name: 'timezone',
 						type: 'string',
-						typeOptions: {
-							password: true,
-						},
 						default: '',
-						description: 'Current password for verification',
+						description: 'User timezone',
 					},
 				],
 			},
@@ -1328,25 +1329,45 @@ export class InfomaniakCoreResources implements INodeType {
 				},
 				options: [
 					{
-						displayName: 'Return',
-						name: 'return',
+						displayName: 'Order',
+						name: 'order',
 						type: 'options',
 						options: [
 							{
-								name: 'Total',
-								value: 'total',
-								description: 'Return total count',
+								name: 'Ascending',
+								value: 'asc',
+							},
+							{
+								name: 'Descending',
+								value: 'desc',
 							},
 						],
-						default: 'total',
-						description: 'Specify what to return',
+						default: 'asc',
+						description: 'Order direction',
 					},
 					{
-						displayName: 'Skip',
-						name: 'skip',
-						type: 'number',
-						default: 0,
-						description: 'Number of items to skip',
+						displayName: 'Order By',
+						name: 'orderBy',
+						type: 'string',
+						default: '',
+						description: 'Field to order by',
+					},
+					{
+						displayName: 'Order For',
+						name: 'orderFor',
+						type: 'options',
+						options: [
+							{
+								name: 'Ascending',
+								value: 'asc',
+							},
+							{
+								name: 'Descending',
+								value: 'desc',
+							},
+						],
+						default: 'asc',
+						description: 'Order direction for fields',
 					},
 					{
 						displayName: 'Page',
@@ -1366,45 +1387,25 @@ export class InfomaniakCoreResources implements INodeType {
 						description: 'Number of items per page',
 					},
 					{
-						displayName: 'Order By',
-						name: 'orderBy',
-						type: 'string',
-						default: '',
-						description: 'Field to order by',
-					},
-					{
-						displayName: 'Order',
-						name: 'order',
+						displayName: 'Return',
+						name: 'return',
 						type: 'options',
 						options: [
 							{
-								name: 'Ascending',
-								value: 'asc',
-							},
-							{
-								name: 'Descending',
-								value: 'desc',
+								name: 'Total',
+								value: 'total',
+								description: 'Return total count',
 							},
 						],
-						default: 'asc',
-						description: 'Order direction',
+						default: 'total',
+						description: 'Specify what to return',
 					},
 					{
-						displayName: 'Order For',
-						name: 'orderFor',
-						type: 'options',
-						options: [
-							{
-								name: 'Ascending',
-								value: 'asc',
-							},
-							{
-								name: 'Descending',
-								value: 'desc',
-							},
-						],
-						default: 'asc',
-						description: 'Order direction for fields',
+						displayName: 'Skip',
+						name: 'skip',
+						type: 'number',
+						default: 0,
+						description: 'Number of items to skip',
 					},
 				],
 			},
@@ -1494,32 +1495,35 @@ export class InfomaniakCoreResources implements INodeType {
 				},
 				options: [
 					{
-						displayName: 'Search',
-						name: 'search',
-						type: 'string',
-						default: '',
-						description: 'Search filter for timezones',
-					},
-					{
-						displayName: 'Return',
-						name: 'return',
+						displayName: 'Order',
+						name: 'order',
 						type: 'options',
 						options: [
 							{
-								name: 'Total',
-								value: 'total',
-								description: 'Return total count',
+								name: 'Ascending',
+								value: 'asc',
+							},
+							{
+								name: 'Descending',
+								value: 'desc',
 							},
 						],
-						default: 'total',
-						description: 'Specify what to return',
+						default: 'asc',
+						description: 'Order direction',
 					},
 					{
-						displayName: 'Skip',
-						name: 'skip',
-						type: 'number',
-						default: 0,
-						description: 'Number of items to skip',
+						displayName: 'Order By',
+						name: 'orderBy',
+						type: 'string',
+						default: '',
+						description: 'Field to order by',
+					},
+					{
+						displayName: 'Order For',
+						name: 'orderFor',
+						type: 'json',
+						default: '{}',
+						description: 'Define the sorting order for a field (JSON object)',
 					},
 					{
 						displayName: 'Page',
@@ -1539,35 +1543,32 @@ export class InfomaniakCoreResources implements INodeType {
 						description: 'Number of items per page',
 					},
 					{
-						displayName: 'Order By',
-						name: 'orderBy',
-						type: 'string',
-						default: '',
-						description: 'Field to order by',
-					},
-					{
-						displayName: 'Order',
-						name: 'order',
+						displayName: 'Return',
+						name: 'return',
 						type: 'options',
 						options: [
 							{
-								name: 'Ascending',
-								value: 'asc',
-							},
-							{
-								name: 'Descending',
-								value: 'desc',
+								name: 'Total',
+								value: 'total',
+								description: 'Return total count',
 							},
 						],
-						default: 'asc',
-						description: 'Order direction',
+						default: 'total',
+						description: 'Specify what to return',
 					},
 					{
-						displayName: 'Order For',
-						name: 'orderFor',
-						type: 'json',
-						default: '{}',
-						description: 'Define the sorting order for a field (JSON object)',
+						displayName: 'Search',
+						name: 'search',
+						type: 'string',
+						default: '',
+						description: 'Search filter for timezones',
+					},
+					{
+						displayName: 'Skip',
+						name: 'skip',
+						type: 'number',
+						default: 0,
+						description: 'Number of items to skip',
 					},
 				],
 			},
@@ -1657,12 +1658,6 @@ export class InfomaniakCoreResources implements INodeType {
 				},
 				options: [
 					{
-						name: 'List Accounts',
-						value: 'listAccounts',
-						description: 'Get all accounts',
-						action: 'List all accounts',
-					},
-					{
 						name: 'Get Account',
 						value: 'getAccount',
 						description: 'Get a specific account by ID',
@@ -1687,10 +1682,10 @@ export class InfomaniakCoreResources implements INodeType {
 						action: 'List account services',
 					},
 					{
-						name: 'List Current Account Products',
-						value: 'listCurrentAccountProducts',
-						description: 'List products of current user account',
-						action: 'List current account products',
+						name: 'List Accounts',
+						value: 'listAccounts',
+						description: 'Get all accounts',
+						action: 'List all accounts',
 					},
 					{
 						name: 'List Basic Teams',
@@ -1699,16 +1694,22 @@ export class InfomaniakCoreResources implements INodeType {
 						action: 'List basic teams',
 					},
 					{
-						name: 'List Users',
-						value: 'listUsers',
-						description: 'List account users',
-						action: 'List users',
+						name: 'List Current Account Products',
+						value: 'listCurrentAccountProducts',
+						description: 'List products of current user account',
+						action: 'List current account products',
 					},
 					{
 						name: 'List User App Accesses',
 						value: 'listUserAppAccesses',
 
 						action: 'List user app accesses',
+					},
+					{
+						name: 'List Users',
+						value: 'listUsers',
+						description: 'List account users',
+						action: 'List users',
 					},
 				],
 				default: 'listAccounts',
@@ -1727,10 +1728,10 @@ export class InfomaniakCoreResources implements INodeType {
 				},
 				options: [
 					{
-						name: 'List Teams',
-						value: 'listTeams',
-						description: 'Get all teams',
-						action: 'List all teams',
+						name: 'Add Users To Team',
+						value: 'addUsersToTeam',
+
+						action: 'Add users to team',
 					},
 					{
 						name: 'Create Team',
@@ -1739,22 +1740,16 @@ export class InfomaniakCoreResources implements INodeType {
 						action: 'Create a team',
 					},
 					{
-						name: 'Get Team',
-						value: 'getTeam',
-						description: 'Get a specific team',
-						action: 'Get a team',
-					},
-					{
-						name: 'Update Team',
-						value: 'updateTeam',
-						description: 'Update a team',
-						action: 'Update a team',
-					},
-					{
 						name: 'Delete Team',
 						value: 'deleteTeam',
 						description: 'Delete a team',
 						action: 'Delete a team',
+					},
+					{
+						name: 'Get Team',
+						value: 'getTeam',
+						description: 'Get a specific team',
+						action: 'Get a team',
 					},
 					{
 						name: 'List Team Users',
@@ -1763,16 +1758,22 @@ export class InfomaniakCoreResources implements INodeType {
 						action: 'List team users',
 					},
 					{
-						name: 'Add Users To Team',
-						value: 'addUsersToTeam',
-
-						action: 'Add users to team',
+						name: 'List Teams',
+						value: 'listTeams',
+						description: 'Get all teams',
+						action: 'List all teams',
 					},
 					{
 						name: 'Remove Users From Team',
 						value: 'removeUsersFromTeam',
 
 						action: 'Remove users from team',
+					},
+					{
+						name: 'Update Team',
+						value: 'updateTeam',
+						description: 'Update a team',
+						action: 'Update a team',
 					},
 				],
 				default: 'listTeams',
@@ -1926,8 +1927,8 @@ export class InfomaniakCoreResources implements INodeType {
 					},
 				},
 				options: [
-					{ name: 'French (France)', value: 'fr_FR' },
 					{ name: 'English (UK)', value: 'en_GB' },
+					{ name: 'French (France)', value: 'fr_FR' },
 					{ name: 'German (Germany)', value: 'de_DE' },
 					{ name: 'Italian (Italy)', value: 'it_IT' },
 					{ name: 'Spanish (Spain)', value: 'es_ES' },
@@ -1970,6 +1971,20 @@ export class InfomaniakCoreResources implements INodeType {
 				},
 				options: [
 					{
+						displayName: 'Notifications',
+						name: 'notifications',
+						type: 'json',
+						default: '{}',
+						description: 'Notifications configuration for the user (JSON object)',
+					},
+					{
+						displayName: 'Permissions',
+						name: 'permissions',
+						type: 'json',
+						default: '{}',
+						description: 'Permissions configuration for the user (JSON object)',
+					},
+					{
 						displayName: 'Silent',
 						name: 'silent',
 						type: 'boolean',
@@ -1990,20 +2005,6 @@ export class InfomaniakCoreResources implements INodeType {
 						default: '',
 						placeholder: '1,2,3',
 						description: 'Comma-separated list of team IDs the user should be added to upon invitation',
-					},
-					{
-						displayName: 'Notifications',
-						name: 'notifications',
-						type: 'json',
-						default: '{}',
-						description: 'Notifications configuration for the user (JSON object)',
-					},
-					{
-						displayName: 'Permissions',
-						name: 'permissions',
-						type: 'json',
-						default: '{}',
-						description: 'Permissions configuration for the user (JSON object)',
 					},
 				],
 			},
@@ -2102,16 +2103,16 @@ export class InfomaniakCoreResources implements INodeType {
 				},
 				options: [
 					{
-						name: 'Get Workspace Users',
-						value: 'getWorkspaceUsers',
-						description: 'Get related workspace users',
-						action: 'Get workspace users',
-					},
-					{
 						name: 'Attach Mailbox',
 						value: 'attachMailbox',
 						description: 'Attach a mailbox to current user',
 						action: 'Attach mailbox',
+					},
+					{
+						name: 'Get Workspace Users',
+						value: 'getWorkspaceUsers',
+						description: 'Get related workspace users',
+						action: 'Get workspace users',
 					},
 					{
 						name: 'Set Primary Mailbox',
@@ -2120,16 +2121,16 @@ export class InfomaniakCoreResources implements INodeType {
 						action: 'Set primary mailbox',
 					},
 					{
-						name: 'Update Mailbox Password',
-						value: 'updateMailboxPassword',
-						description: 'Update mailbox credential password',
-						action: 'Update mailbox password',
-					},
-					{
 						name: 'Unlink Mailbox',
 						value: 'unlinkMailbox',
 						description: 'Unlink a mailbox from current user',
 						action: 'Unlink mailbox',
+					},
+					{
+						name: 'Update Mailbox Password',
+						value: 'updateMailboxPassword',
+						description: 'Update mailbox credential password',
+						action: 'Update mailbox password',
 					},
 				],
 				default: 'getWorkspaceUsers',
@@ -2260,7 +2261,7 @@ export class InfomaniakCoreResources implements INodeType {
 						name: 'isPrimary',
 						type: 'boolean',
 						default: false,
-						description: 'Set this mailbox as primary',
+						description: 'Whether to set this mailbox as primary',
 					},
 				],
 			},
@@ -2336,7 +2337,7 @@ export class InfomaniakCoreResources implements INodeType {
 				const handler = resourceHandlers[resource];
 
 				if (!handler) {
-					throw new Error(`Unknown resource: ${resource}`);
+					throw new NodeOperationError(this.getNode(), `Unknown resource: ${resource}`, { itemIndex: i });
 				}
 
 				// Execute the resource handler

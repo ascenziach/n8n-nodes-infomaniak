@@ -22,7 +22,9 @@
       "Bash(rg:*)",
       "Bash(awk:*)",
       "Bash(npx tsc:*)",
-      "WebFetch(domain:developer.infomaniak.com)"
+      "WebFetch(domain:developer.infomaniak.com)",
+      "Bash(InfomaniakCoreResources.node.new.ts)",
+      "Bash(find:*)"
     ],
     "deny": [],
     "ask": []
