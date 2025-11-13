@@ -298,7 +298,7 @@ export class InfomaniakKDrive implements INodeType {
 					},
 				},
 				default: '',
-				description: 'Search query',
+
 			},
 			{
 				displayName: 'New Name',
@@ -393,6 +393,7 @@ export class InfomaniakKDrive implements INodeType {
 				displayName: 'Email',
 				name: 'email',
 				type: 'string',
+				placeholder: 'name@email.com',
 				required: true,
 				displayOptions: {
 					show: {

@@ -225,6 +225,7 @@ export class InfomaniakKMeet implements INodeType {
 						name: 'Password',
 						value: 'password',
 						type: 'string',
+						typeOptions: { password: true },
 						default: '',
 						description: 'Password (required if password_enabled is true)',
 					},
@@ -277,10 +278,6 @@ export class InfomaniakKMeet implements INodeType {
 								default: 'NEEDS-ACTION',
 								options: [
 									{
-										name: 'Needs Action',
-										value: 'NEEDS-ACTION',
-									},
-									{
 										name: 'Accepted',
 										value: 'ACCEPTED',
 									},
@@ -289,12 +286,16 @@ export class InfomaniakKMeet implements INodeType {
 										value: 'DECLINED',
 									},
 									{
-										name: 'Tentative',
-										value: 'TENTATIVE',
-									},
-									{
 										name: 'Delegated',
 										value: 'DELEGATED',
+									},
+									{
+										name: 'Needs Action',
+										value: 'NEEDS-ACTION',
+									},
+									{
+										name: 'Tentative',
+										value: 'TENTATIVE',
 									},
 								],
 								description: 'Attendance status',

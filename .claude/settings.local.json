@@ -26,7 +26,10 @@
       "Bash(InfomaniakCoreResources.node.new.ts)",
       "Bash(find:*)",
       "Bash(FILTER_BRANCH_SQUELCH_WARNING=1 git filter-branch:*)",
-      "Bash(node -e:*)"
+      "Bash(node -e:*)",
+      "Bash(git mv:*)",
+      "Bash(git checkout:*)",
+      "Bash(npx eslint:*)"
     ],
     "deny": [],
     "ask": []

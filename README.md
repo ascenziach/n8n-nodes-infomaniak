@@ -3,7 +3,7 @@
 [![Version](https://img.shields.io/npm/v/n8n-nodes-infomaniak)](https://www.npmjs.com/package/n8n-nodes-infomaniak)
 [![License](https://img.shields.io/npm/l/n8n-nodes-infomaniak)](https://github.com/ascenziach/n8n-nodes-infomaniak/blob/master/LICENSE)
 
-> **⚠️ BETA VERSION**: This package is currently in beta. While fully functional, the API may change based on user feedback. Please report any issues on [GitHub](https://github.com/ascenziach/n8n-nodes-infomaniak/issues).
+> **⚠️ BETA VERSION - ALL NODES IN BETA TESTING**: This package and all its nodes are currently in beta testing phase. While fully functional, features and APIs may change based on user feedback. Please report any issues on [GitHub](https://github.com/ascenziach/n8n-nodes-infomaniak/issues).
 
 This is an n8n community node that lets you interact with the [Infomaniak API](https://developer.infomaniak.com/) directly from your n8n workflows.
 
@@ -51,9 +51,13 @@ For manual installation in n8n Docker setups, add to your package.json or instal
 
 ## Operations
 
-This node provides access to the following Infomaniak resources:
+> **🧪 Beta Notice**: All operations and nodes are in beta testing. Features may evolve based on user feedback.
 
-### Core Resources
+This package provides multiple specialized nodes for different Infomaniak services:
+
+### Infomaniak Core Resources
+
+Core API operations for account and profile management:
 
 | Resource | Operations | Description |
 |----------|-----------|-------------|
@@ -120,6 +124,80 @@ Manage kSuite workspaces, mailboxes, and products:
 
 #### Product Management
 - **Cancel Unsubscribe**: Cancel a pending cancellation
+
+### Infomaniak kChat (Beta)
+
+Team messaging and collaboration platform operations:
+- **Channels**: Create, Get, Get Many, Update, Delete channels
+- **Posts**: Create, Get, Get Many, Update, Delete posts/messages
+- **Users**: Get, Get Many, Get By Email, Get By Username, Update users
+- **Teams**: Create, Get, Get Many, Update, Delete teams
+
+### Infomaniak kDrive (Beta)
+
+Cloud storage and file management operations:
+- **Drives**: Get Many, Update drives
+- **Files**: Search, Get Directory, Copy, Move, Rename, Delete files
+- **Users**: Create, Get, Get Many, Update, Delete users
+
+### Infomaniak kMeet (Beta)
+
+Video conferencing room management:
+- **Rooms**: Create, Get, Get Many, Update, Delete meeting rooms
+- Configure attendees, passwords, and meeting settings
+
+### Infomaniak Newsletter (Beta)
+
+Email marketing and newsletter management:
+- **Newsletters**: Create, Get, Get Many, Update, Delete newsletters
+- **Mailinglists**: Manage mailing lists and recipients
+- **Statistics**: Access campaign statistics and metrics
+
+### Infomaniak eTicket (Beta)
+
+Event ticketing and management:
+- **Events**: Create, Get, Get Many, Update, Delete events
+- **Products**: Manage ticket products and pricing
+- **Orders**: Track and manage ticket orders
+
+### Infomaniak URL Shortener (Beta)
+
+URL shortening service operations:
+- **Create**: Create shortened URLs with optional expiration
+- **List**: List all short URLs with pagination and search
+- **Update**: Update URL expiration dates
+- **Get Quota**: Check your short URL quota
+
+### Infomaniak Streaming Radio (Beta)
+
+Internet radio streaming management:
+- **Radio Products**: Get, Get Many radio products
+- **Stations**: Create, Get, Get Many, Update, Delete radio stations
+- **Streams**: Manage audio streams (MP3/AAC) with bitrate configuration
+- **Players**: Create, Get, Get Many, Update, Delete embedded players
+
+### Infomaniak Streaming Video (VOD) (Beta)
+
+Video on demand and streaming:
+- **Channels**: Get, Get Many, Update video channels
+- **Media**: Get, Get Many, Update, Delete videos
+- **Folders**: Organize video content
+- **Players**: Manage video players
+
+### Infomaniak Public Cloud (Beta)
+
+Infrastructure as a Service (IaaS) management:
+- **Compute Instances**: Create, Get, Get Many, Update, Delete instances
+- **Volumes**: Create, Get, Get Many, Update, Delete storage volumes
+- **Snapshots**: Create, Get, Get Many, Delete snapshots
+- **Networks**: Manage virtual networks and security groups
+
+### Infomaniak Swiss Backup (Beta)
+
+Backup storage management:
+- **Swiss Backups**: Get, Get Many, Update backup products
+- **Slots**: Create, Get, Get Many, Update, Delete, Enable, Disable backup slots
+- Configure FTP/SFTP access and storage allocation
 
 ## Credentials
 
@@ -307,16 +385,24 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## Version History
 
-### 1.4.0 (Current - BETA)
-- 🎉 Complete architecture refactoring
-- ✨ Modular resource-based structure
-- ✅ Comprehensive TypeScript type definitions
-- 🛡️ Enhanced validation and error handling
-- 🧪 Added unit tests
-- 📝 Improved documentation
-- 🚀 Better performance and maintainability
+### 1.9.0 (Current - BETA)
+- 🎉 Major expansion with 9 new specialized nodes
+- ✨ Added Infomaniak kChat node (messaging platform)
+- ✨ Added Infomaniak kDrive node (cloud storage)
+- ✨ Added Infomaniak kMeet node (video conferencing)
+- ✨ Added Infomaniak Newsletter node (email marketing)
+- ✨ Added Infomaniak eTicket node (event ticketing)
+- ✨ Added Infomaniak URL Shortener node
+- ✨ Added Infomaniak Streaming Radio node
+- ✨ Added Infomaniak Streaming Video (VOD) node
+- ✨ Added Infomaniak Public Cloud node (IaaS)
+- ✨ Added Infomaniak Swiss Backup node
+- 🛡️ Consistent resource-based architecture across all nodes
+- 📝 Comprehensive documentation for all services
+- **⚠️ ALL NODES IN BETA TESTING PHASE**
 
 ### Previous Versions
+- 1.4.0 - Complete architecture refactoring, modular structure
 - 1.3.0 - Added User Management operations
 - 1.2.0 - Added Profile management
 - 1.1.0 - Added kSuite support
@@ -358,4 +444,18 @@ If you discover a security vulnerability, please email ascenziach@users.noreply.
 
 **Made with ❤️ for the n8n and Infomaniak communities**
 
-**⚠️ Beta Notice**: This is a beta release. Features and APIs may change. We appreciate your feedback to make this node better!
+---
+
+## ⚠️ BETA TESTING NOTICE
+
+**ALL NODES ARE CURRENTLY IN BETA TESTING PHASE**
+
+This package includes 11 nodes covering various Infomaniak services. While all nodes are fully functional and tested, they are in beta phase which means:
+
+- ✅ Core functionality is stable and working
+- ⚠️ APIs and features may evolve based on user feedback
+- 🐛 Please report any issues on [GitHub](https://github.com/ascenziach/n8n-nodes-infomaniak/issues)
+- 💬 Your feedback helps improve the nodes for everyone
+- 📝 Documentation and examples are continuously being improved
+
+We appreciate your patience and feedback as we refine these integrations!

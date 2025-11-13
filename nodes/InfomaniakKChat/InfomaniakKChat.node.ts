@@ -83,6 +83,12 @@ export class InfomaniakKChat implements INodeType {
 						action: 'Create channel',
 					},
 					{
+						name: 'Delete',
+						value: 'delete',
+						description: 'Delete a channel',
+						action: 'Delete channel',
+					},
+					{
 						name: 'Get',
 						value: 'get',
 						description: 'Get a channel',
@@ -99,12 +105,6 @@ export class InfomaniakKChat implements INodeType {
 						value: 'update',
 						description: 'Update a channel',
 						action: 'Update channel',
-					},
-					{
-						name: 'Delete',
-						value: 'delete',
-						description: 'Delete a channel',
-						action: 'Delete channel',
 					},
 				],
 				default: 'getAll',
@@ -128,6 +128,12 @@ export class InfomaniakKChat implements INodeType {
 						action: 'Create post',
 					},
 					{
+						name: 'Delete',
+						value: 'delete',
+						description: 'Delete a post',
+						action: 'Delete post',
+					},
+					{
 						name: 'Get',
 						value: 'get',
 						description: 'Get a post',
@@ -144,12 +150,6 @@ export class InfomaniakKChat implements INodeType {
 						value: 'update',
 						description: 'Update a post',
 						action: 'Update post',
-					},
-					{
-						name: 'Delete',
-						value: 'delete',
-						description: 'Delete a post',
-						action: 'Delete post',
 					},
 				],
 				default: 'create',
@@ -173,12 +173,6 @@ export class InfomaniakKChat implements INodeType {
 						action: 'Get user',
 					},
 					{
-						name: 'Get Many',
-						value: 'getAll',
-						description: 'Get many users',
-						action: 'Get many users',
-					},
-					{
 						name: 'Get By Email',
 						value: 'getByEmail',
 						description: 'Get a user by email',
@@ -189,6 +183,12 @@ export class InfomaniakKChat implements INodeType {
 						value: 'getByUsername',
 						description: 'Get a user by username',
 						action: 'Get user by username',
+					},
+					{
+						name: 'Get Many',
+						value: 'getAll',
+						description: 'Get many users',
+						action: 'Get many users',
 					},
 					{
 						name: 'Update',
@@ -218,6 +218,12 @@ export class InfomaniakKChat implements INodeType {
 						action: 'Create team',
 					},
 					{
+						name: 'Delete',
+						value: 'delete',
+						description: 'Delete a team',
+						action: 'Delete team',
+					},
+					{
 						name: 'Get',
 						value: 'get',
 						description: 'Get a team',
@@ -234,12 +240,6 @@ export class InfomaniakKChat implements INodeType {
 						value: 'update',
 						description: 'Update a team',
 						action: 'Update team',
-					},
-					{
-						name: 'Delete',
-						value: 'delete',
-						description: 'Delete a team',
-						action: 'Delete team',
 					},
 				],
 				default: 'getAll',
@@ -391,7 +391,10 @@ export class InfomaniakKChat implements INodeType {
 				displayName: 'Limit',
 				name: 'limit',
 				type: 'number',
-				default: 60,
+				typeOptions: {
+					minValue: 1,
+				},
+				default: 50,
 				displayOptions: {
 					show: {
 						resource: ['channel'],
@@ -465,7 +468,10 @@ export class InfomaniakKChat implements INodeType {
 				displayName: 'Limit',
 				name: 'limit',
 				type: 'number',
-				default: 60,
+				typeOptions: {
+					minValue: 1,
+				},
+				default: 50,
 				displayOptions: {
 					show: {
 						resource: ['post'],
@@ -510,6 +516,7 @@ export class InfomaniakKChat implements INodeType {
 				displayName: 'Email',
 				name: 'email',
 				type: 'string',
+				placeholder: 'name@email.com',
 				default: '',
 				required: true,
 				displayOptions: {
@@ -524,6 +531,7 @@ export class InfomaniakKChat implements INodeType {
 				displayName: 'Email',
 				name: 'email',
 				type: 'string',
+				placeholder: 'name@email.com',
 				default: '',
 				displayOptions: {
 					show: {
@@ -546,7 +554,7 @@ export class InfomaniakKChat implements INodeType {
 						operation: ['getByUsername'],
 					},
 				},
-				description: 'The username',
+
 			},
 			{
 				displayName: 'Username',
@@ -573,7 +581,7 @@ export class InfomaniakKChat implements INodeType {
 						operation: ['update'],
 					},
 				},
-				description: 'The first name',
+
 			},
 			// Last Name (for update)
 			{
@@ -587,7 +595,7 @@ export class InfomaniakKChat implements INodeType {
 						operation: ['update'],
 					},
 				},
-				description: 'The last name',
+
 			},
 			// Nickname (for update)
 			{
@@ -601,14 +609,17 @@ export class InfomaniakKChat implements INodeType {
 						operation: ['update'],
 					},
 				},
-				description: 'The nickname',
+
 			},
 			// Pagination fields for users
 			{
 				displayName: 'Limit',
 				name: 'limit',
 				type: 'number',
-				default: 60,
+				typeOptions: {
+					minValue: 1,
+				},
+				default: 50,
 				displayOptions: {
 					show: {
 						resource: ['user'],
@@ -734,7 +745,10 @@ export class InfomaniakKChat implements INodeType {
 				displayName: 'Limit',
 				name: 'limit',
 				type: 'number',
-				default: 60,
+				typeOptions: {
+					minValue: 1,
+				},
+				default: 50,
 				displayOptions: {
 					show: {
 						resource: ['team'],

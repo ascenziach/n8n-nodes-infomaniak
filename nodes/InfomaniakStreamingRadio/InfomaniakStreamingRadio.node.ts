@@ -381,13 +381,6 @@ export class InfomaniakStreamingRadio implements INodeType {
 				},
 				options: [
 					{
-						displayName: 'Name',
-						name: 'name',
-						type: 'string',
-						default: '',
-						description: 'The name of the station',
-					},
-					{
 						displayName: 'Is Daily Restart',
 						name: 'is_daily_restart',
 						type: 'boolean',
@@ -400,6 +393,13 @@ export class InfomaniakStreamingRadio implements INodeType {
 						type: 'boolean',
 						default: false,
 						description: 'Whether to send logs',
+					},
+					{
+						displayName: 'Name',
+						name: 'name',
+						type: 'string',
+						default: '',
+						description: 'The name of the station',
 					},
 					{
 						displayName: 'Time Daily Restart',

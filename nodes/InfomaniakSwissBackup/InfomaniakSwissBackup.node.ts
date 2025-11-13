@@ -287,6 +287,7 @@ export class InfomaniakSwissBackup implements INodeType {
 				displayName: 'Email',
 				name: 'email',
 				type: 'string',
+				placeholder: 'name@email.com',
 				required: true,
 				displayOptions: {
 					show: {
@@ -363,7 +364,7 @@ export class InfomaniakSwissBackup implements INodeType {
 							},
 						],
 						default: 'sftp',
-						description: 'Connection type',
+
 					},
 					{
 						displayName: 'Firstname',
@@ -434,6 +435,7 @@ export class InfomaniakSwissBackup implements INodeType {
 						displayName: 'Email',
 						name: 'email',
 						type: 'string',
+						placeholder: 'name@email.com',
 						default: '',
 						description: 'Email address',
 					},

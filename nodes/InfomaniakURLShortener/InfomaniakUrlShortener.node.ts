@@ -14,7 +14,7 @@ import {
 export class InfomaniakURLShortener implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'Infomaniak URL Shortener',
-		name: 'infomaniakURLShortener',
+		name: 'infomaniakUrlShortener',
 		icon: 'file:InfomaniakURLShortener.svg',
 		group: ['transform'],
 		version: 1,
@@ -54,7 +54,7 @@ export class InfomaniakURLShortener implements INodeType {
 						name: 'List',
 						value: 'list',
 						description: 'List all short URLs',
-						action: 'List short URLs',
+						action: 'List short ur ls',
 					},
 					{
 						name: 'Update',
@@ -132,7 +132,7 @@ export class InfomaniakURLShortener implements INodeType {
 				},
 				typeOptions: {
 					minValue: 1,
-					maxValue: 500,
+
 				},
 				description: 'Max number of results to return',
 			},
@@ -189,7 +189,7 @@ export class InfomaniakURLShortener implements INodeType {
 								value: 'DESC',
 							},
 						],
-						description: 'Order direction',
+
 					},
 					{
 						name: 'Search',
