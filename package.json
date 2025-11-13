@@ -44,8 +44,17 @@
       "dist/nodes/InfomaniakCoreResources/InfomaniakCoreResources.node.js",
       "dist/nodes/InfomaniakDNS/InfomaniakDns.node.js",
       "dist/nodes/InfomaniakEmail/InfomaniakEmail.node.js",
+      "dist/nodes/InfomaniakETicket/InfomaniakETicket.node.js",
+      "dist/nodes/InfomaniakKChat/InfomaniakKChat.node.js",
+      "dist/nodes/InfomaniakKDrive/InfomaniakKDrive.node.js",
+      "dist/nodes/InfomaniakKMeet/InfomaniakKMeet.node.js",
+      "dist/nodes/InfomaniakNewsletter/InfomaniakNewsletter.node.js",
       "dist/nodes/InfomaniakPublicCloud/InfomaniakPublicCloud.node.js",
-      "dist/nodes/InfomaniakStreamingVideo/InfomaniakStreamingVideo.node.js"
+      "dist/nodes/InfomaniakStreamingRadio/InfomaniakStreamingRadio.node.js",
+      "dist/nodes/InfomaniakStreamingVideo/InfomaniakStreamingVideo.node.js",
+      "dist/nodes/InfomaniakSwissBackup/InfomaniakSwissBackup.node.js",
+      "dist/nodes/InfomaniakURLShortener/InfomaniakURLShortener.node.js",
+      "dist/nodes/InfomaniakVOD/InfomaniakVOD.node.js"
     ]
   },
   "devDependencies": {
