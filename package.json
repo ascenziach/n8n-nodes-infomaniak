@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-infomaniak",
-  "version": "1.9.1",
+  "version": "1.9.2",
   "description": "n8n node for Infomaniak API integration",
   "keywords": [
     "n8n-community-node-package",
@@ -46,15 +46,15 @@
       "dist/nodes/InfomaniakEmail/InfomaniakEmail.node.js",
       "dist/nodes/InfomaniakETicket/InfomaniakETicket.node.js",
       "dist/nodes/InfomaniakKChat/InfomaniakKChat.node.js",
-      "dist/nodes/InfomaniakKDrive/InfomaniakKDrive.node.js",
+      "dist/nodes/InfomaniakKDrive/InfomaniakKdrive.node.js",
       "dist/nodes/InfomaniakKMeet/InfomaniakKMeet.node.js",
       "dist/nodes/InfomaniakNewsletter/InfomaniakNewsletter.node.js",
       "dist/nodes/InfomaniakPublicCloud/InfomaniakPublicCloud.node.js",
       "dist/nodes/InfomaniakStreamingRadio/InfomaniakStreamingRadio.node.js",
       "dist/nodes/InfomaniakStreamingVideo/InfomaniakStreamingVideo.node.js",
       "dist/nodes/InfomaniakSwissBackup/InfomaniakSwissBackup.node.js",
-      "dist/nodes/InfomaniakURLShortener/InfomaniakURLShortener.node.js",
-      "dist/nodes/InfomaniakVOD/InfomaniakVOD.node.js"
+      "dist/nodes/InfomaniakURLShortener/InfomaniakUrlShortener.node.js",
+      "dist/nodes/InfomaniakVOD/InfomaniakVod.node.js"
     ]
   },
   "devDependencies": {
